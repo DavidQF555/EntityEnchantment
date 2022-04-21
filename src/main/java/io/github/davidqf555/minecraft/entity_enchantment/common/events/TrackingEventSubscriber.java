@@ -2,7 +2,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.events;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateEnchantedEntityPacket;
+import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +23,7 @@ public final class TrackingEventSubscriber {
         PlayerEntity player = event.getPlayer();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayerEntity && target instanceof LivingEntity) {
-            Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new UpdateEnchantedEntityPacket(target.getId(), EntityEnchantments.isEnchanted((LivingEntity) target)));
+            Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new UpdateClientEntityEnchantmentsPacket(target.getId(), EntityEnchantments.get((LivingEntity) target).getAllEnchantments()));
         }
     }
 }

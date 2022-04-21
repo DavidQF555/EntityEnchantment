@@ -1,7 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
-import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateEnchantedEntityPacket;
+import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -42,47 +42,41 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
             if (current > 0) {
                 enchantment.onEnd(entity, current);
                 enchantments.setLevel(enchantment, 0);
-                boolean prev = isEnchanted(entity);
-                setEnchanted(entity, anyEnchantments(entity));
-                boolean curr = isEnchanted(entity);
-                if (prev != curr) {
-                    Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateEnchantedEntityPacket(entity.getId(), curr));
-                }
+                Map<EntityEnchantment, Integer> map = enchantments.getAllEnchantments();
+                setEnchantments(entity, map);
+                Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateClientEntityEnchantmentsPacket(entity.getId(), map));
                 return true;
             }
         } else if (enchantment.isValid(entity, level) && level != current) {
             enchantment.onEnd(entity, level);
             enchantments.setLevel(enchantment, level);
             enchantment.onStart(entity, level);
-            boolean prev = isEnchanted(entity);
-            setEnchanted(entity, true);
-            if (!prev) {
-                Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateEnchantedEntityPacket(entity.getId(), true));
-            }
+            Map<EntityEnchantment, Integer> map = enchantments.getAllEnchantments();
+            setEnchantments(entity, map);
+            Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateClientEntityEnchantmentsPacket(entity.getId(), map));
             return true;
         }
         return false;
     }
 
-    public static boolean anyEnchantments(LivingEntity entity) {
-        EntityEnchantments enchantments = get(entity);
-        return EntityEnchantmentRegistry.getRegistry().getValues().stream().anyMatch(enchantment -> enchantments.getLevel(enchantment) > 0);
-    }
-
     public static boolean isEnchanted(LivingEntity entity) {
-        CompoundNBT tag = entity.getPersistentData().getCompound(Main.MOD_ID);
-        return tag.contains("Enchanted", Constants.NBT.TAG_BYTE) && tag.getBoolean("Enchanted");
-    }
-
-    public static void setEnchanted(Entity entity, boolean enchanted) {
         CompoundNBT data = entity.getPersistentData();
         if (data.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
-            data.getCompound(Main.MOD_ID).putBoolean("Enchanted", enchanted);
-        } else {
-            CompoundNBT tag = new CompoundNBT();
-            tag.putBoolean("Enchanted", enchanted);
-            data.put(Main.MOD_ID, tag);
+            CompoundNBT tag = data.getCompound(Main.MOD_ID);
+            for (String key : tag.getAllKeys()) {
+                if (tag.contains(key, Constants.NBT.TAG_INT) && tag.getInt(key) > 0) {
+                    return true;
+                }
+            }
         }
+        return false;
+    }
+
+    public static void setEnchantments(Entity entity, Map<EntityEnchantment, Integer> enchantments) {
+        CompoundNBT data = entity.getPersistentData();
+        CompoundNBT tag = new CompoundNBT();
+        enchantments.forEach((enchantment, level) -> tag.putInt(enchantment.toString(), level));
+        data.put(Main.MOD_ID, tag);
     }
 
     public static EntityEnchantments get(LivingEntity entity) {
@@ -95,6 +89,10 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
 
     public int getLevel(EntityEnchantment enchantment) {
         return enchantments.getOrDefault(enchantment, 0);
+    }
+
+    public Map<EntityEnchantment, Integer> getAllEnchantments() {
+        return enchantments;
     }
 
     @Override

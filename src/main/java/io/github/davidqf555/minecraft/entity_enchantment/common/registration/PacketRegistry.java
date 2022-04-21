@@ -1,7 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.registration;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateEnchantedEntityPacket;
+import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -15,7 +15,7 @@ public final class PacketRegistry {
     @SubscribeEvent
     public static void onFMLCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            UpdateEnchantedEntityPacket.register(0);
+            UpdateClientEntityEnchantmentsPacket.register(0);
         });
     }
 }
