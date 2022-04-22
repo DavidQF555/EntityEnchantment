@@ -83,6 +83,12 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
         return entity.getCapability(Provider.capability).orElseGet(EntityEnchantments::new);
     }
 
+    public void onTick(LivingEntity entity) {
+        getAllEnchantments().forEach((enchantment, level) -> {
+            enchantment.onTick(entity, level);
+        });
+    }
+
     public void setLevel(EntityEnchantment enchantment, int level) {
         enchantments.put(enchantment, level);
     }
