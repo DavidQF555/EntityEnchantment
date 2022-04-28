@@ -8,6 +8,10 @@ import java.util.Map;
 
 public abstract class PotionEffectEnchantment extends EntityEnchantment {
 
+    public PotionEffectEnchantment(int max) {
+        super(max);
+    }
+
     @Override
     public void onTick(LivingEntity entity, int level) {
         super.onTick(entity, level);

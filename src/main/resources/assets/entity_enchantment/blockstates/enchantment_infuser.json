@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "entity_enchantment:block/enchantment_infuser",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "entity_enchantment:block/enchantment_infuser"
+    },
+    "facing=south": {
+      "model": "entity_enchantment:block/enchantment_infuser",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "entity_enchantment:block/enchantment_infuser",
+      "y": 270
+    }
+  }
+}

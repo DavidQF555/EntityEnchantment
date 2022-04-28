@@ -18,7 +18,7 @@ public final class ClientReference {
         if (world != null) {
             Entity entity = world.getEntity(id);
             if (entity != null) {
-                EntityEnchantments.setEnchantments(entity, enchantments);
+                EntityEnchantments.setEnchantmentsData(entity, enchantments);
             }
         }
     }

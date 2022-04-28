@@ -54,7 +54,7 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
         return false;
     }
 
-    public static boolean isEnchanted(LivingEntity entity) {
+    public static boolean isDataEnchanted(LivingEntity entity) {
         CompoundNBT data = entity.getPersistentData();
         if (data.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
             CompoundNBT tag = data.getCompound(Main.MOD_ID);
@@ -67,7 +67,7 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
         return false;
     }
 
-    public static void setEnchantments(Entity entity, Map<EntityEnchantment, Integer> enchantments) {
+    public static void setEnchantmentsData(Entity entity, Map<EntityEnchantment, Integer> enchantments) {
         CompoundNBT data = entity.getPersistentData();
         CompoundNBT tag = new CompoundNBT();
         enchantments.forEach((enchantment, level) -> tag.putInt(enchantment.toString(), level));
@@ -94,6 +94,10 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
 
     public Map<EntityEnchantment, Integer> getAllEnchantments() {
         return enchantments;
+    }
+
+    public boolean isEmpty() {
+        return getAllEnchantments().isEmpty() || getAllEnchantments().values().stream().noneMatch(level -> level > 0);
     }
 
     @Override

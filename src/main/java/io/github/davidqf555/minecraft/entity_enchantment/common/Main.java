@@ -1,6 +1,9 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common;
 
+import io.github.davidqf555.minecraft.entity_enchantment.common.registration.BlockRegistry;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,6 +30,9 @@ public class Main {
     }
 
     private static void addRegistries(IEventBus bus) {
+        BlockRegistry.BLOCKS.register(bus);
+        TileEntityRegistry.TYPES.register(bus);
+        ItemRegistry.ITEMS.register(bus);
         EntityEnchantmentRegistry.ENCHANTMENTS.register(bus);
     }
 }
