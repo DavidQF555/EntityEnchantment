@@ -13,9 +13,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class TrackingEventSubscriber {
+public final class DataEventSubscriber {
 
-    private TrackingEventSubscriber() {
+    private DataEventSubscriber() {
     }
 
     @SubscribeEvent
@@ -24,6 +24,14 @@ public final class TrackingEventSubscriber {
         Entity target = event.getTarget();
         if (player instanceof ServerPlayerEntity && target instanceof LivingEntity) {
             Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new UpdateClientEntityEnchantmentsPacket(target.getId(), EntityEnchantments.get((LivingEntity) target).getAllEnchantments()));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        PlayerEntity player = event.getPlayer();
+        if (player instanceof ServerPlayerEntity) {
+            Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new UpdateClientEntityEnchantmentsPacket(player.getId(), EntityEnchantments.get(player).getAllEnchantments()));
         }
     }
 }

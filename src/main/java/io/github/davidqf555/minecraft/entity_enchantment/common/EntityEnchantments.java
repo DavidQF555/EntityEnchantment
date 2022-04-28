@@ -38,22 +38,17 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
     public static boolean setEnchantment(LivingEntity entity, EntityEnchantment enchantment, int level) {
         EntityEnchantments enchantments = get(entity);
         int current = enchantments.getLevel(enchantment);
-        if (level <= 0) {
+        if (current != level && enchantment.isValid(entity, level)) {
             if (current > 0) {
                 enchantment.onEnd(entity, current);
-                enchantments.setLevel(enchantment, 0);
-                Map<EntityEnchantment, Integer> map = enchantments.getAllEnchantments();
-                setEnchantments(entity, map);
-                Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateClientEntityEnchantmentsPacket(entity.getId(), map));
-                return true;
             }
-        } else if (enchantment.isValid(entity, level) && level != current) {
-            enchantment.onEnd(entity, level);
             enchantments.setLevel(enchantment, level);
-            enchantment.onStart(entity, level);
-            Map<EntityEnchantment, Integer> map = enchantments.getAllEnchantments();
-            setEnchantments(entity, map);
-            Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateClientEntityEnchantmentsPacket(entity.getId(), map));
+            if (level > 0) {
+                enchantment.onStart(entity, level);
+            }
+            Map<EntityEnchantment, Integer> levels = enchantments.getAllEnchantments();
+            setEnchantmentsData(entity, levels);
+            Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new UpdateClientEntityEnchantmentsPacket(entity.getId(), levels));
             return true;
         }
         return false;
