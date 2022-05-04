@@ -18,9 +18,9 @@ public final class TileEntityRegistry {
 
     private static <T extends TileEntityType<?>> RegistryObject<T> register(String name, Supplier<T> type) {
         return TYPES.register(name, type);
-    }    public static final RegistryObject<TileEntityType<ScrollTileEntity>> ENCHANTMENT_SCROLL = register("enchantment_scroll", () -> TileEntityType.Builder.of(ScrollTileEntity::new, BlockRegistry.ENCHANTMENT_INFUSER.get()).build(null));
+    }
 
-
+    public static final RegistryObject<TileEntityType<ScrollTileEntity>> ENCHANTMENT_SCROLL = register("enchantment_scroll", () -> TileEntityType.Builder.of(ScrollTileEntity::new, BlockRegistry.ENCHANTMENT_INFUSER.get()).build(null));
 
 
 }
