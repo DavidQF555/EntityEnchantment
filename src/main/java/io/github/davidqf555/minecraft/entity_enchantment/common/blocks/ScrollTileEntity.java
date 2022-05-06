@@ -25,7 +25,7 @@ public class ScrollTileEntity extends TileEntity implements IInventory {
     }
 
     public ScrollTileEntity() {
-        this(TileEntityRegistry.ENCHANTMENT_SCROLL.get());
+        this(TileEntityRegistry.SCROLL.get());
     }
 
     @Override

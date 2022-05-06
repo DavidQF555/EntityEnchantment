@@ -1,19 +1,74 @@
 {
-  "variants": {
-    "facing=east": {
-      "model": "entity_enchantment:block/enchantment_infuser",
-      "y": 90
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lectern"
+      }
     },
-    "facing=north": {
-      "model": "entity_enchantment:block/enchantment_infuser"
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lectern",
+        "y": 90
+      }
     },
-    "facing=south": {
-      "model": "entity_enchantment:block/enchantment_infuser",
-      "y": 180
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lectern",
+        "y": 180
+      }
     },
-    "facing=west": {
-      "model": "entity_enchantment:block/enchantment_infuser",
-      "y": 270
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lectern",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lantern"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lantern",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lantern",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "entity_enchantment:block/lantern",
+        "y": 270
+      }
     }
-  }
+  ]
 }

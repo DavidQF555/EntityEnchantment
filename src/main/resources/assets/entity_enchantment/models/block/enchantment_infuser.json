@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "entity_enchantment:block/infuser_top",
-    "front": "entity_enchantment:block/infuser_front",
-    "side": "entity_enchantment:block/infuser_side"
-  }
-}

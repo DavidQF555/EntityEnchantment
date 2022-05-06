@@ -2,7 +2,9 @@ package io.github.davidqf555.minecraft.entity_enchantment.client;
 
 
 import io.github.davidqf555.minecraft.entity_enchantment.client.render.EnchantmentRenderer;
+import io.github.davidqf555.minecraft.entity_enchantment.client.render.ScrollRenderer;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
+import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -10,6 +12,7 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -21,6 +24,7 @@ public final class EventBusSubscriber {
 
     @SubscribeEvent
     public static void onFMLClientSetup(FMLClientSetupEvent event) {
+        ClientRegistry.bindTileEntityRenderer(TileEntityRegistry.SCROLL.get(), ScrollRenderer::new);
         event.enqueueWork(() -> {
             EntityRendererManager manager = Minecraft.getInstance().getEntityRenderDispatcher();
             manager.getSkinMap().values().forEach(EventBusSubscriber::addEnchantmentLayer);

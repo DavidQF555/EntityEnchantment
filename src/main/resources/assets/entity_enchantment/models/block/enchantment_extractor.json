@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "entity_enchantment:block/extractor_top",
-    "front": "entity_enchantment:block/extractor_front",
-    "side": "entity_enchantment:block/extractor_side"
-  }
-}
