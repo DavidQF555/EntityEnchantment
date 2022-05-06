@@ -15,13 +15,16 @@ public class ServerConfigs {
     }
 
     public final ForgeConfigSpec.DoubleValue shifterHeight, shifterWidth;
+    public final ForgeConfigSpec.IntValue shifterCost;
 
     public ServerConfigs(ForgeConfigSpec.Builder builder) {
         builder.push("Server config for Entity Enchantment mod");
         shifterWidth = builder.comment("This is the width that the Enchantment Shifter checks for entities. ")
-                .defineInRange("infuserWidth", 3.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("shifterWidth", 3.0, 0.0, Double.MAX_VALUE);
         shifterHeight = builder.comment("This is the height that the Enchantment Shifter checks for entities. ")
-                .defineInRange("infuserHeight", 2.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("shifterHeight", 2.0, 0.0, Double.MAX_VALUE);
+        shifterCost = builder.comment("This is the cost in experience levels to use the Enchantment Shifter. ")
+                .defineInRange("shifterCost", 5, 0, Integer.MAX_VALUE);
         builder.pop();
     }
 

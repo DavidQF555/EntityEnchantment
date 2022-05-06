@@ -15,6 +15,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -24,12 +25,14 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -73,38 +76,46 @@ public class EnchantmentShifterBlock extends ContainerBlock {
                         }
                     }
                 } else if (player.isCrouching()) {
-                    InventoryHelper.dropContents(world, pos, scroll);
+                    Vector3d drop = Vector3d.upFromBottomCenterOf(pos, 1);
+                    InventoryHelper.dropItemStack(world, drop.x(), drop.y(), drop.z(), scroll.getItem());
                     scroll.clearContent();
                     world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.EMPTY));
                     return ActionResultType.CONSUME;
-                } else if (!world.isClientSide()) {
-                    Direction dir = state.getValue(FACING).getOpposite();
-                    Vector3d start = Vector3d.atCenterOf(pos).add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(0.5));
-                    double width = ServerConfigs.INSTANCE.shifterWidth.get();
-                    AxisAlignedBB bounds = AxisAlignedBB.ofSize(width, ServerConfigs.INSTANCE.shifterHeight.get(), width).move(start.add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(width / 2)));
-                    List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, bounds);
-                    entities.sort(Comparator.comparingDouble(entity -> start.distanceToSqr(entity.position())));
-                    if (inv.getItem() instanceof EnchantedScrollItem) {
-                        for (LivingEntity entity : entities) {
-                            if (((EnchantedScrollItem) inv.getItem()).applyTo(inv, entity)) {
-                                scroll.clearContent();
-                                world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.EMPTY));
-                                return ActionResultType.CONSUME;
+                } else if (world instanceof ServerWorld) {
+                    int cost = ServerConfigs.INSTANCE.shifterCost.get();
+                    if (player.experienceLevel >= cost || player.isCreative()) {
+                        Direction dir = state.getValue(FACING).getOpposite();
+                        Vector3d start = Vector3d.atCenterOf(pos).add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(0.5));
+                        double width = ServerConfigs.INSTANCE.shifterWidth.get();
+                        AxisAlignedBB bounds = AxisAlignedBB.ofSize(width, ServerConfigs.INSTANCE.shifterHeight.get(), width).move(start.add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(width / 2)));
+                        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, bounds);
+                        entities.sort(Comparator.comparingDouble(entity -> start.distanceToSqr(entity.position())));
+                        if (inv.getItem() instanceof EnchantedScrollItem) {
+                            for (LivingEntity entity : entities) {
+                                if (((EnchantedScrollItem) inv.getItem()).applyTo(inv, entity)) {
+                                    addTrail((ServerWorld) world, start, entity.getEyePosition(1));
+                                    scroll.clearContent();
+                                    world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.EMPTY));
+                                    player.giveExperienceLevels(-cost);
+                                    return ActionResultType.CONSUME;
+                                }
                             }
-                        }
-                    } else if (inv.getItem().equals(ItemRegistry.SCROLL.get())) {
-                        for (LivingEntity entity : entities) {
-                            EntityEnchantments data = EntityEnchantments.get(entity);
-                            if (!data.isEmpty()) {
-                                Map<EntityEnchantment, Integer> enchantments = new HashMap<>();
-                                EntityEnchantment selected = Util.getRandom(data.getAllEnchantments().entrySet().stream().filter(entry -> entry.getValue() > 0).map(Map.Entry::getKey).toArray(EntityEnchantment[]::new), player.getRandom());
-                                enchantments.put(selected, data.getLevel(selected));
-                                data.setLevel(selected, 0);
-                                ItemStack enchanted = ItemRegistry.ENCHANTED_SCROLL.get().getDefaultInstance();
-                                ((EnchantedScrollItem) enchanted.getItem()).setEnchantments(enchanted, enchantments);
-                                scroll.setItem(enchanted);
-                                world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.ENCHANTED));
-                                return ActionResultType.CONSUME;
+                        } else if (inv.getItem().equals(ItemRegistry.SCROLL.get())) {
+                            for (LivingEntity entity : entities) {
+                                EntityEnchantments data = EntityEnchantments.get(entity);
+                                if (!data.isEmpty()) {
+                                    addTrail((ServerWorld) world, start, entity.getEyePosition(1));
+                                    Map<EntityEnchantment, Integer> enchantments = new HashMap<>();
+                                    EntityEnchantment selected = Util.getRandom(data.getAllEnchantments().entrySet().stream().filter(entry -> entry.getValue() > 0).map(Map.Entry::getKey).toArray(EntityEnchantment[]::new), player.getRandom());
+                                    enchantments.put(selected, data.getLevel(selected));
+                                    EntityEnchantments.setEnchantment(entity, selected, 0);
+                                    ItemStack enchanted = ItemRegistry.ENCHANTED_SCROLL.get().getDefaultInstance();
+                                    ((EnchantedScrollItem) enchanted.getItem()).setEnchantments(enchanted, enchantments);
+                                    scroll.setItem(enchanted);
+                                    world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.ENCHANTED));
+                                    player.giveExperienceLevels(-cost);
+                                    return ActionResultType.CONSUME;
+                                }
                             }
                         }
                     }
@@ -112,6 +123,16 @@ public class EnchantmentShifterBlock extends ContainerBlock {
             }
         }
         return ActionResultType.PASS;
+    }
+
+    private void addTrail(ServerWorld world, Vector3d start, Vector3d end) {
+        double length = end.subtract(start).length();
+        int count = MathHelper.ceil(length * 4);
+        Vector3d norm = end.subtract(start).scale(1 / length);
+        for (int i = 0; i < count; i++) {
+            Vector3d pos = start.add(norm.scale(length / count * i));
+            world.sendParticles(ParticleTypes.ENCHANT, pos.x(), pos.y(), pos.z(), 5, 0.1, 0.1, 0.1, 0.05);
+        }
     }
 
     @Override
