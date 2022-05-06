@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EnchantmentInfuserBlock extends ContainerBlock {
+public class EnchantmentShifterBlock extends ContainerBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<ScrollState> SCROLL = EnumProperty.create("scroll", ScrollState.class);
@@ -47,7 +47,7 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
     public static final VoxelShape SHAPE_EAST = VoxelShapes.or(Block.box(8.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12), Block.box(15.0D, 10.0D, 0.0D, 10.666667D, 14.0D, 16.0D), Block.box(10.666667D, 12.0D, 0.0D, 6.333333D, 16.0D, 16.0D), Block.box(6.333333D, 14.0D, 0.0D, 2.0D, 18.0D, 16.0D), SHAPE_COMMON);
     public static final VoxelShape SHAPE_SOUTH = VoxelShapes.or(Block.box(4.0D, 2.0D, 8.0D, 12.0D, 14.0D, 12), Block.box(0.0D, 10.0D, 15.0D, 16.0D, 14.0D, 10.666667D), Block.box(0.0D, 12.0D, 10.666667D, 16.0D, 16.0D, 6.333333D), Block.box(0.0D, 14.0D, 6.333333D, 16.0D, 18.0D, 2.0D), SHAPE_COMMON);
 
-    public EnchantmentInfuserBlock(Properties properties) {
+    public EnchantmentShifterBlock(Properties properties) {
         super(properties);
     }
 
@@ -80,8 +80,8 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
                 } else if (!world.isClientSide()) {
                     Direction dir = state.getValue(FACING).getOpposite();
                     Vector3d start = Vector3d.atCenterOf(pos).add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(0.5));
-                    double width = ServerConfigs.INSTANCE.infuserWidth.get();
-                    AxisAlignedBB bounds = AxisAlignedBB.ofSize(width, ServerConfigs.INSTANCE.infuserHeight.get(), width).move(start.add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(width / 2)));
+                    double width = ServerConfigs.INSTANCE.shifterWidth.get();
+                    AxisAlignedBB bounds = AxisAlignedBB.ofSize(width, ServerConfigs.INSTANCE.shifterHeight.get(), width).move(start.add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(width / 2)));
                     List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, bounds);
                     entities.sort(Comparator.comparingDouble(entity -> start.distanceToSqr(entity.position())));
                     if (inv.getItem() instanceof EnchantedScrollItem) {

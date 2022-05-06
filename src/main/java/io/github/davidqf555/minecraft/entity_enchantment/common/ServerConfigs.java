@@ -14,13 +14,13 @@ public class ServerConfigs {
         SPEC = pair.getRight();
     }
 
-    public final ForgeConfigSpec.DoubleValue infuserHeight, infuserWidth;
+    public final ForgeConfigSpec.DoubleValue shifterHeight, shifterWidth;
 
     public ServerConfigs(ForgeConfigSpec.Builder builder) {
         builder.push("Server config for Entity Enchantment mod");
-        infuserWidth = builder.comment("This is the width that the Enchantment Infuser checks for entities. ")
+        shifterWidth = builder.comment("This is the width that the Enchantment Shifter checks for entities. ")
                 .defineInRange("infuserWidth", 3.0, 0.0, Double.MAX_VALUE);
-        infuserHeight = builder.comment("This is the height that the Enchantment Infuser checks for entities. ")
+        shifterHeight = builder.comment("This is the height that the Enchantment Shifter checks for entities. ")
                 .defineInRange("infuserHeight", 2.0, 0.0, Double.MAX_VALUE);
         builder.pop();
     }
