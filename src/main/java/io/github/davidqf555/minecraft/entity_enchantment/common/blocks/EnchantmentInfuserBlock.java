@@ -1,6 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.blocks;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
+import io.github.davidqf555.minecraft.entity_enchantment.common.ServerConfigs;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.items.EnchantedScrollItem;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
@@ -45,7 +46,6 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
     public static final VoxelShape SHAPE_NORTH = VoxelShapes.or(Block.box(4.0D, 2.0D, 4.0D, 12.0D, 14.0D, 8), Block.box(0.0D, 10.0D, 1.0D, 16.0D, 14.0D, 5.333333D), Block.box(0.0D, 12.0D, 5.333333D, 16.0D, 16.0D, 9.666667D), Block.box(0.0D, 14.0D, 9.666667D, 16.0D, 18.0D, 14.0D), SHAPE_COMMON);
     public static final VoxelShape SHAPE_EAST = VoxelShapes.or(Block.box(8.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12), Block.box(15.0D, 10.0D, 0.0D, 10.666667D, 14.0D, 16.0D), Block.box(10.666667D, 12.0D, 0.0D, 6.333333D, 16.0D, 16.0D), Block.box(6.333333D, 14.0D, 0.0D, 2.0D, 18.0D, 16.0D), SHAPE_COMMON);
     public static final VoxelShape SHAPE_SOUTH = VoxelShapes.or(Block.box(4.0D, 2.0D, 8.0D, 12.0D, 14.0D, 12), Block.box(0.0D, 10.0D, 15.0D, 16.0D, 14.0D, 10.666667D), Block.box(0.0D, 12.0D, 10.666667D, 16.0D, 16.0D, 6.333333D), Block.box(0.0D, 14.0D, 6.333333D, 16.0D, 18.0D, 2.0D), SHAPE_COMMON);
-    private static final double VERTICAL_RANGE = 2, HORIZONTAL_RANGE = 10;
 
     public EnchantmentInfuserBlock(Properties properties) {
         super(properties);
@@ -80,7 +80,8 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
                 } else if (!world.isClientSide()) {
                     Direction dir = state.getValue(FACING).getOpposite();
                     Vector3d start = Vector3d.atCenterOf(pos).add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(0.5));
-                    AxisAlignedBB bounds = AxisAlignedBB.ofSize(HORIZONTAL_RANGE, VERTICAL_RANGE, HORIZONTAL_RANGE).move(start.add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(HORIZONTAL_RANGE / 2)));
+                    double width = ServerConfigs.INSTANCE.infuserWidth.get();
+                    AxisAlignedBB bounds = AxisAlignedBB.ofSize(width, ServerConfigs.INSTANCE.infuserHeight.get(), width).move(start.add(Vector3d.atLowerCornerOf(dir.getNormal()).scale(width / 2)));
                     List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, bounds);
                     entities.sort(Comparator.comparingDouble(entity -> start.distanceToSqr(entity.position())));
                     if (inv.getItem() instanceof EnchantedScrollItem) {
@@ -118,6 +119,7 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
         return BlockRenderType.MODEL;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOcclusionShape(BlockState p_196247_1_, IBlockReader p_196247_2_, BlockPos p_196247_3_) {
         switch (p_196247_1_.getValue(FACING)) {
@@ -134,11 +136,13 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean useShapeForLightOcclusion(BlockState p_220074_1_) {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
         switch (p_220071_1_.getValue(FACING)) {
@@ -155,6 +159,7 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
         switch (p_220053_1_.getValue(FACING)) {
@@ -171,11 +176,13 @@ public class EnchantmentInfuserBlock extends ContainerBlock {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public BlockState rotate(BlockState p_185499_1_, Rotation p_185499_2_) {
         return p_185499_1_.setValue(FACING, p_185499_2_.rotate(p_185499_1_.getValue(FACING)));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public BlockState mirror(BlockState p_185471_1_, Mirror p_185471_2_) {
         return p_185471_1_.rotate(p_185471_2_.getRotation(p_185471_1_.getValue(FACING)));
