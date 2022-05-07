@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 public final class EntityEnchantmentRegistry {
 
     public static final DeferredRegister<EntityEnchantment> ENCHANTMENTS = DeferredRegister.create(EntityEnchantment.class, Main.MOD_ID);
-    public static final RegistryObject<AttributeModificationEnchantment> STRENGTH = register("strength", () -> new AttributeModificationEnchantment(5, UUID.fromString("eb19a5fb-f2bf-4610-8bf6-5fcaf80fcff9"), new AttributeModificationEnchantment.Modifier(Attributes.ATTACK_DAMAGE, 1.5, AttributeModifier.Operation.MULTIPLY_TOTAL)));
+    public static final RegistryObject<AttributeModificationEnchantment> STRENGTH = register("strength", () -> new AttributeModificationEnchantment(5, 1, UUID.fromString("eb19a5fb-f2bf-4610-8bf6-5fcaf80fcff9"), new AttributeModificationEnchantment.Modifier(Attributes.ATTACK_DAMAGE, 1.5, AttributeModifier.Operation.MULTIPLY_TOTAL)));
     private static IForgeRegistry<EntityEnchantment> REGISTRY = null;
 
     private EntityEnchantmentRegistry() {

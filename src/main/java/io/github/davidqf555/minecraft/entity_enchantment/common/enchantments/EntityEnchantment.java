@@ -11,11 +11,18 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
 
-    private final int max;
+    private static int totalWeight = 0;
+    private final int max, weight;
     private String id;
 
-    public EntityEnchantment(int max) {
+    public EntityEnchantment(int max, int weight) {
         this.max = max;
+        this.weight = weight;
+        totalWeight += weight;
+    }
+
+    public static int getTotalWeight() {
+        return totalWeight;
     }
 
     public void onStart(LivingEntity entity, int level) {
@@ -32,6 +39,10 @@ public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
 
     public int getNaturalMax() {
         return max;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 
     public boolean isValid(LivingEntity entity, int level) {

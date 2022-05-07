@@ -13,8 +13,8 @@ public class AttributeModificationEnchantment extends EntityEnchantment {
     private final Modifier[] modifiers;
     private final UUID id;
 
-    public AttributeModificationEnchantment(int max, UUID id, Modifier... modifiers) {
-        super(max);
+    public AttributeModificationEnchantment(int max, int weight, UUID id, Modifier... modifiers) {
+        super(max, weight);
         this.id = id;
         this.modifiers = modifiers;
     }

@@ -8,8 +8,8 @@ import java.util.Map;
 
 public abstract class PotionEffectEnchantment extends EntityEnchantment {
 
-    public PotionEffectEnchantment(int max) {
-        super(max);
+    public PotionEffectEnchantment(int max, int weight) {
+        super(max, weight);
     }
 
     @Override
