@@ -2,6 +2,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
@@ -34,6 +35,10 @@ public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
     }
 
     public void onTick(LivingEntity entity, int level) {
+
+    }
+
+    public void onDamaged(LivingEntity entity, int level, DamageSource source, float damage) {
 
     }
 

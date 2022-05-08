@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -80,8 +81,18 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
 
     public void onTick(LivingEntity entity) {
         getAllEnchantments().forEach((enchantment, level) -> {
-            enchantment.onTick(entity, level);
+            if (level > 0) {
+                enchantment.onTick(entity, level);
+            }
         });
+    }
+
+    public void onDamaged(LivingEntity entity, DamageSource source, float damage) {
+        getAllEnchantments().forEach(((enchantment, level) -> {
+            if (level > 0) {
+                enchantment.onDamaged(entity, level, source, damage);
+            }
+        }));
     }
 
     public void setLevel(EntityEnchantment enchantment, int level) {

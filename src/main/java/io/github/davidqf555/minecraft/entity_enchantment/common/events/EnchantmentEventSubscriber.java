@@ -1,17 +1,26 @@
-package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
+package io.github.davidqf555.minecraft.entity_enchantment.common.events;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class EnchantmentEventBusSubscriber {
+public final class EnchantmentEventSubscriber {
 
-    private EnchantmentEventBusSubscriber() {
+    private EnchantmentEventSubscriber() {
+    }
+
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent event) {
+        LivingEntity entity = event.getEntityLiving();
+        if (!entity.level.isClientSide()) {
+            EntityEnchantments.get(entity).onDamaged(entity, event.getSource(), event.getAmount());
+        }
     }
 
     @SubscribeEvent
