@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "paper"
+    }
+  },
+  "result": {
+    "item": "entity_enchantment:scroll"
+  }
+}

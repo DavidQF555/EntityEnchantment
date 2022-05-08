@@ -1,0 +1,25 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "#@#",
+    "&%#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "obsidian"
+    },
+    "@": {
+      "item": "diamond"
+    },
+    "%": {
+      "item": "lectern"
+    },
+    "&": {
+      "item": "lantern"
+    }
+  },
+  "result": {
+    "item": "entity_enchantment:enchantment_transfuser"
+  }
+}
