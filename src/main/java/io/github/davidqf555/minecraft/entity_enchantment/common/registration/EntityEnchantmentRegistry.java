@@ -4,6 +4,7 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.AttributeModificationEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.ExplosionEnchantment;
+import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.IllusionEnchantment;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +25,7 @@ public final class EntityEnchantmentRegistry {
     public static final DeferredRegister<EntityEnchantment> ENCHANTMENTS = DeferredRegister.create(EntityEnchantment.class, Main.MOD_ID);
     public static final RegistryObject<AttributeModificationEnchantment> STRENGTH = register("strength", () -> new AttributeModificationEnchantment(5, 1, UUID.fromString("eb19a5fb-f2bf-4610-8bf6-5fcaf80fcff9"), new AttributeModificationEnchantment.Modifier(Attributes.ATTACK_DAMAGE, 1.5, AttributeModifier.Operation.MULTIPLY_TOTAL)));
     public static final RegistryObject<EntityEnchantment> UNSTABLE = register("unstable", () -> new ExplosionEnchantment(2, 1, 5, level -> level * 2f, level -> level >= 2));
+    public static final RegistryObject<IllusionEnchantment> ILLUSION = register("illusion", () -> new IllusionEnchantment(3, 1, level -> level * 30, level -> level * 2));
     private static IForgeRegistry<EntityEnchantment> REGISTRY = null;
 
     private EntityEnchantmentRegistry() {

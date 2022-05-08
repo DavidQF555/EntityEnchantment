@@ -2,6 +2,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.registration;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;
+import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientIllusionTicksPacket;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -16,6 +17,7 @@ public final class PacketRegistry {
     public static void onFMLCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             UpdateClientEntityEnchantmentsPacket.register(0);
+            UpdateClientIllusionTicksPacket.register(1);
         });
     }
 }

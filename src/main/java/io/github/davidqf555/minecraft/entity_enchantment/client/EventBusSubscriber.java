@@ -2,6 +2,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.client;
 
 
 import io.github.davidqf555.minecraft.entity_enchantment.client.render.EnchantmentRenderer;
+import io.github.davidqf555.minecraft.entity_enchantment.client.render.IllusionRenderer;
 import io.github.davidqf555.minecraft.entity_enchantment.client.render.ScrollRenderer;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
@@ -27,10 +28,14 @@ public final class EventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(TileEntityRegistry.SCROLL.get(), ScrollRenderer::new);
         event.enqueueWork(() -> {
             EntityRendererManager manager = Minecraft.getInstance().getEntityRenderDispatcher();
-            manager.getSkinMap().values().forEach(EventBusSubscriber::addEnchantmentLayer);
+            manager.getSkinMap().values().forEach(renderer -> {
+                addEnchantmentLayer(renderer);
+                addIllusionLayer(renderer);
+            });
             manager.renderers.forEach((type, renderer) -> {
                 if (renderer instanceof LivingRenderer) {
                     addEnchantmentLayer((LivingRenderer<LivingEntity, EntityModel<LivingEntity>>) renderer);
+                    addIllusionLayer((LivingRenderer<LivingEntity, EntityModel<LivingEntity>>) renderer);
                 }
             });
         });
@@ -38,5 +43,9 @@ public final class EventBusSubscriber {
 
     private static <T extends LivingEntity, M extends EntityModel<T>> void addEnchantmentLayer(LivingRenderer<T, M> renderer) {
         renderer.addLayer(new EnchantmentRenderer<>(renderer));
+    }
+
+    private static <T extends LivingEntity, M extends EntityModel<T>> void addIllusionLayer(LivingRenderer<T, M> renderer) {
+        renderer.addLayer(new IllusionRenderer<>(renderer));
     }
 }
