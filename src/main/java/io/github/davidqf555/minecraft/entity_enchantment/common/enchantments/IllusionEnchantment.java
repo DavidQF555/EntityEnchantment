@@ -121,7 +121,7 @@ public class IllusionEnchantment extends EntityEnchantment {
             Random rand = entity.getRandom();
             Vector3d[] offsets = new Vector3d[count];
             for (int i = 0; i < count; i++) {
-                offsets[i] = new Vector3d(rand.nextDouble() * 7 - 3, rand.nextDouble() * 2, rand.nextDouble() * 7 - 3);
+                offsets[i] = new Vector3d(rand.nextDouble() * 7 - 3, rand.nextDouble() * 3 - 1, rand.nextDouble() * 7 - 3);
             }
             setIllusionOffsets(entity, offsets);
             int duration = this.duration.apply(level);

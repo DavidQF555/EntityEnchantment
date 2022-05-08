@@ -30,7 +30,7 @@ public class IllusionRenderer<T extends LivingEntity, M extends EntityModel<T>> 
             for (Vector3d offset : IllusionEnchantment.getIllusionOffsets(p_225628_4_)) {
                 Vector3d dif = offset.scale(distFactor);
                 p_225628_1_.pushPose();
-                p_225628_1_.translate(dif.x(), dif.y(), dif.z());
+                p_225628_1_.translate(dif.x(), -dif.y(), dif.z());
                 model.renderToBuffer(p_225628_1_, p_225628_2_.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(p_225628_4_))), p_225628_3_, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
                 for (LayerRenderer<T, M> layer : renderer.layers) {
                     if (!equals(layer)) {
