@@ -1,0 +1,10 @@
+{
+  "item.entity_enchantment.scroll": "Scroll",
+  "item.entity_enchantment.enchanted_scroll": "Enchanted Scroll",
+  "block.entity_enchantment.enchantment_transfuser": "Enchantment Transfuser",
+  "entity_enchantment.entity_enchantment.strength": "Strength",
+  "entity_enchantment.entity_enchantment.speed": "Speed",
+  "entity_enchantment.entity_enchantment.armor": "Armor",
+  "entity_enchantment.entity_enchantment.unstable": "Unstable",
+  "entity_enchantment.entity_enchantment.illusion": "Illusion"
+}
