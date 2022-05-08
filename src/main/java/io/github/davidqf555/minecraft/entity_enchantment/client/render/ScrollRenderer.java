@@ -2,7 +2,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.EnchantmentShifterBlock;
+import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.EnchantmentTransfuserBlock;
 import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.ScrollTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -27,12 +27,12 @@ public class ScrollRenderer extends TileEntityRenderer<ScrollTileEntity> {
         BlockState state = p_225616_1_.getBlockState();
         p_225616_3_.pushPose();
         p_225616_3_.translate(0.5D, 1.0625D, 0.5D);
-        p_225616_3_.mulPose(Vector3f.YP.rotationDegrees(-state.getValue(EnchantmentShifterBlock.FACING).getClockWise().toYRot()));
+        p_225616_3_.mulPose(Vector3f.YP.rotationDegrees(-state.getValue(EnchantmentTransfuserBlock.FACING).getClockWise().toYRot()));
         p_225616_3_.mulPose(Vector3f.ZN.rotationDegrees(22.5F));
         p_225616_3_.translate(0.125, -0.125D, 0.0D);
         p_225616_3_.mulPose(Vector3f.XP.rotationDegrees(90));
         p_225616_3_.translate(0, 0, -0.125);
-        switch (state.getValue(EnchantmentShifterBlock.SCROLL)) {
+        switch (state.getValue(EnchantmentTransfuserBlock.SCROLL)) {
             case ENCHANTED:
                 model.renderToBuffer(p_225616_3_, p_225616_4_.getBuffer(RenderType.entityGlint()), p_225616_5_, p_225616_6_, 1, 1, 1, 1);
             case SCROLL:

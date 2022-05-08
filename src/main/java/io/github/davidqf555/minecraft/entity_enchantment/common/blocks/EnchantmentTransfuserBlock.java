@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EnchantmentShifterBlock extends ContainerBlock {
+public class EnchantmentTransfuserBlock extends ContainerBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<ScrollState> SCROLL = EnumProperty.create("scroll", ScrollState.class);
@@ -50,7 +50,7 @@ public class EnchantmentShifterBlock extends ContainerBlock {
     public static final VoxelShape SHAPE_EAST = VoxelShapes.or(Block.box(8.0D, 2.0D, 4.0D, 12.0D, 14.0D, 12), Block.box(15.0D, 10.0D, 0.0D, 10.666667D, 14.0D, 16.0D), Block.box(10.666667D, 12.0D, 0.0D, 6.333333D, 16.0D, 16.0D), Block.box(6.333333D, 14.0D, 0.0D, 2.0D, 18.0D, 16.0D), SHAPE_COMMON);
     public static final VoxelShape SHAPE_SOUTH = VoxelShapes.or(Block.box(4.0D, 2.0D, 8.0D, 12.0D, 14.0D, 12), Block.box(0.0D, 10.0D, 15.0D, 16.0D, 14.0D, 10.666667D), Block.box(0.0D, 12.0D, 10.666667D, 16.0D, 16.0D, 6.333333D), Block.box(0.0D, 14.0D, 6.333333D, 16.0D, 18.0D, 2.0D), SHAPE_COMMON);
 
-    public EnchantmentShifterBlock(Properties properties) {
+    public EnchantmentTransfuserBlock(Properties properties) {
         super(properties);
     }
 
