@@ -7,9 +7,9 @@ modId = "entity_enchantment"
 version = "${file.jarVersion}"
 displayName = "Entity Enchantment"
 displayURL = "https://github.com/DavidQF555/EntityEnchantment"
-#logoFile = "logo.png"
+logoFile = "logo.png"
 authors = "DavidQF555"
-description = 'This mod enchantments to entities.'
+description = 'This mod adds enchantments to entities.'
 [[dependencies.entity_enchantment]]
 modId = "forge"
 mandatory = true
