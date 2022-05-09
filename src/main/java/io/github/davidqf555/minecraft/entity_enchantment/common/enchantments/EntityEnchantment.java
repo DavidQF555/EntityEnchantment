@@ -4,9 +4,6 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.registration.Ent
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Util;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -61,8 +58,8 @@ public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
         return id;
     }
 
-    public ITextComponent getDisplayName(int level) {
-        IFormattableTextComponent text = new TranslationTextComponent(getID()).withStyle(TextFormatting.GRAY);
+    public TranslationTextComponent getDisplayName(int level) {
+        TranslationTextComponent text = new TranslationTextComponent(getID());
         if (level != 1 || getNaturalMax() != 1) {
             text.append(" ").append(new TranslationTextComponent("enchantment.level." + level));
         }

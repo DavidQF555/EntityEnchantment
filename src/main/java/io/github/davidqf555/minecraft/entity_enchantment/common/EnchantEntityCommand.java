@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class EnchantEntityCommand {
 
-    private static final String COULD_NOT_FIND = "";
+    private static final String COULD_NOT_FIND = "command." + Main.MOD_ID + ".could_not_find", APPLY = "command." + Main.MOD_ID + ".apply";
 
     private EnchantEntityCommand() {
     }
@@ -34,14 +34,21 @@ public final class EnchantEntityCommand {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(Commands.literal("enchantentity")
                 .requires(source -> source.hasPermission(2))
-                .then(Commands.argument("targets", EntityArgument.entities())
-                        .then(Commands.argument("enchantment", ResourceLocationArgument.id())
-                                .suggests(new EntityEnchantmentProvider())
-                                .then(Commands.argument("level", IntegerArgumentType.integer(0))
-                                        .then(Commands.literal("add")
+                .then(Commands.literal("add")
+                        .then(Commands.argument("targets", EntityArgument.entities())
+                                .then(Commands.argument("enchantment", ResourceLocationArgument.id())
+                                        .suggests(new EntityEnchantmentProvider())
+                                        .then(Commands.argument("level", IntegerArgumentType.integer(0))
                                                 .executes(context -> add(context.getSource(), EntityArgument.getEntities(context, "targets"), ResourceLocationArgument.getId(context, "enchantment"), IntegerArgumentType.getInteger(context, "level")))
                                         )
-                                        .then(Commands.literal("set")
+                                )
+                        )
+                )
+                .then(Commands.literal("set")
+                        .then(Commands.argument("targets", EntityArgument.entities())
+                                .then(Commands.argument("enchantment", ResourceLocationArgument.id())
+                                        .suggests(new EntityEnchantmentProvider())
+                                        .then(Commands.argument("level", IntegerArgumentType.integer(0))
                                                 .executes(context -> set(context.getSource(), EntityArgument.getEntities(context, "targets"), ResourceLocationArgument.getId(context, "enchantment"), IntegerArgumentType.getInteger(context, "level")))
                                         )
                                 )
@@ -56,7 +63,7 @@ public final class EnchantEntityCommand {
             source.sendFailure(new TranslationTextComponent(COULD_NOT_FIND, enchantment));
             return 0;
         }
-        return add(targets, val, level);
+        return add(source, targets, val, level);
     }
 
     private static int set(CommandSource source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
@@ -65,26 +72,28 @@ public final class EnchantEntityCommand {
             source.sendFailure(new TranslationTextComponent(COULD_NOT_FIND, enchantment));
             return 0;
         }
-        return set(targets, val, level);
+        return set(source, targets, val, level);
     }
 
-    private static int add(Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
+    private static int add(CommandSource source, Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
         int success = 0;
         for (Entity target : targets) {
             if (target instanceof LivingEntity && EntityEnchantments.addEnchantment((LivingEntity) target, enchantment, level)) {
                 success++;
             }
         }
+        source.sendSuccess(new TranslationTextComponent(APPLY, enchantment.getDisplayName(level), success), true);
         return success;
     }
 
-    private static int set(Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
+    private static int set(CommandSource source, Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
         int success = 0;
         for (Entity target : targets) {
             if (target instanceof LivingEntity && EntityEnchantments.setEnchantment((LivingEntity) target, enchantment, level)) {
                 success++;
             }
         }
+        source.sendSuccess(new TranslationTextComponent(APPLY, enchantment.getDisplayName(level), success), true);
         return success;
     }
 

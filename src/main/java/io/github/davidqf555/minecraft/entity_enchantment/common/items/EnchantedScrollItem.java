@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -36,7 +37,7 @@ public class EnchantedScrollItem extends SimpleFoiledItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> text, ITooltipFlag tooltip) {
         super.appendHoverText(stack, world, text, tooltip);
-        getEnchantments(stack).forEach((enchantment, level) -> text.add(enchantment.getDisplayName(level)));
+        getEnchantments(stack).forEach((enchantment, level) -> text.add(enchantment.getDisplayName(level).withStyle(TextFormatting.GRAY)));
     }
 
     @Override

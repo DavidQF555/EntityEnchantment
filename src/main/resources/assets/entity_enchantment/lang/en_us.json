@@ -1,4 +1,6 @@
 {
+  "command.entity_enchantment.could_not_find": "Could not find enchantment %s",
+  "command.entity_enchantment.apply": "Applied enchantment %1$s to %2$s targets",
   "item.entity_enchantment.scroll": "Scroll",
   "item.entity_enchantment.enchanted_scroll": "Enchanted Scroll",
   "block.entity_enchantment.enchantment_transfuser": "Enchantment Transfuser",
