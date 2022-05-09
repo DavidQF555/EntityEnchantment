@@ -116,7 +116,8 @@ public class IllusionEnchantment extends EntityEnchantment {
 
     @Override
     public void onDamaged(LivingEntity entity, int level, DamageSource source, float damage) {
-        if (getIllusionDuration(entity) <= 0) {
+        int current = getIllusionDuration(entity);
+        if (current <= 0) {
             int count = this.count.apply(level);
             Random rand = entity.getRandom();
             Vector3d[] offsets = new Vector3d[count];
@@ -128,7 +129,7 @@ public class IllusionEnchantment extends EntityEnchantment {
             setTotalIllusionDuration(entity, duration);
             setIllusionDuration(entity, duration);
         } else {
-            setIllusionDuration(entity, Math.min(10, getTotalIllusionDuration(entity) / 2));
+            setIllusionDuration(entity, Math.min(current, Math.min(10, getTotalIllusionDuration(entity) / 2)));
         }
     }
 
