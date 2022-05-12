@@ -5,7 +5,7 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.ServerConfigs;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

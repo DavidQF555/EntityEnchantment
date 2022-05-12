@@ -2,10 +2,10 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.packets;
 
 import io.github.davidqf555.minecraft.entity_enchantment.client.ClientReference;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -14,25 +14,25 @@ import java.util.function.Supplier;
 
 public class UpdateClientIllusionTicksPacket {
 
-    private static final BiConsumer<UpdateClientIllusionTicksPacket, PacketBuffer> ENCODER = (message, buffer) -> {
+    private static final BiConsumer<UpdateClientIllusionTicksPacket, FriendlyByteBuf> ENCODER = (message, buffer) -> {
         buffer.writeInt(message.id);
         buffer.writeInt(message.ticks);
         buffer.writeInt(message.total);
         buffer.writeInt(message.offsets.length);
-        for (Vector3d offset : message.offsets) {
+        for (Vec3 offset : message.offsets) {
             buffer.writeDouble(offset.x());
             buffer.writeDouble(offset.y());
             buffer.writeDouble(offset.z());
         }
     };
-    private static final Function<PacketBuffer, UpdateClientIllusionTicksPacket> DECODER = buffer -> {
+    private static final Function<FriendlyByteBuf, UpdateClientIllusionTicksPacket> DECODER = buffer -> {
         int id = buffer.readInt();
         int ticks = buffer.readInt();
         int total = buffer.readInt();
         int length = buffer.readInt();
-        Vector3d[] offsets = new Vector3d[length];
+        Vec3[] offsets = new Vec3[length];
         for (int i = 0; i < length; i++) {
-            offsets[i] = new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+            offsets[i] = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
         }
         return new UpdateClientIllusionTicksPacket(id, ticks, total, offsets);
     };
@@ -42,9 +42,9 @@ public class UpdateClientIllusionTicksPacket {
     };
 
     private final int id, ticks, total;
-    private final Vector3d[] offsets;
+    private final Vec3[] offsets;
 
-    public UpdateClientIllusionTicksPacket(int id, int ticks, int total, Vector3d[] offsets) {
+    public UpdateClientIllusionTicksPacket(int id, int ticks, int total, Vec3[] offsets) {
         this.id = id;
         this.total = total;
         this.ticks = ticks;

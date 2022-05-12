@@ -2,61 +2,57 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.blocks;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class ScrollTileEntity extends TileEntity implements IInventory {
+public class ScrollTileEntity extends BlockEntity implements Container {
 
     private ItemStack item;
 
-    protected ScrollTileEntity(TileEntityType<?> type) {
-        super(type);
+    protected ScrollTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
         item = ItemStack.EMPTY;
     }
 
-    public ScrollTileEntity() {
-        this(TileEntityRegistry.SCROLL.get());
+    public ScrollTileEntity(BlockPos pos, BlockState state) {
+        this(TileEntityRegistry.SCROLL.get(), pos, state);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbt) {
-        nbt = super.save(nbt);
-        nbt.put("Item", getItem().save(new CompoundNBT()));
-        return nbt;
+    public void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
+        nbt.put("Item", getItem().save(new CompoundTag()));
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
-        if (nbt.contains("Item", Constants.NBT.TAG_COMPOUND)) {
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
+        if (nbt.contains("Item", Tag.TAG_COMPOUND)) {
             setItem(ItemStack.of(nbt.getCompound("Item")));
         }
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        deserializeNBT(pkt.getTag());
-    }
-
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return save(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        saveAdditional(tag);
+        return tag;
     }
 
     public ItemStack getItem() {
@@ -112,7 +108,7 @@ public class ScrollTileEntity extends TileEntity implements IInventory {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 

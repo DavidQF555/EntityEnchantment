@@ -2,12 +2,11 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.events;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -27,18 +26,13 @@ public final class EnchantmentEventSubscriber {
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.WorldTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && event.world instanceof ServerWorld) {
-            ((ServerWorld) event.world).getEntities()
-                    .filter(entity -> entity instanceof LivingEntity)
-                    .forEach(entity -> EntityEnchantments.get((LivingEntity) entity).onTick((LivingEntity) entity));
+        if (event.phase == TickEvent.Phase.START && event.world instanceof ServerLevel) {
+            for (Entity entity : ((ServerLevel) event.world).getEntities().getAll()) {
+                if (entity instanceof LivingEntity) {
+                    EntityEnchantments.get((LivingEntity) entity).onTick((LivingEntity) entity);
+                }
+            }
         }
     }
 
-    @SubscribeEvent
-    public static void onPlayerClone(PlayerEvent.Clone event) {
-        PlayerEntity clone = event.getPlayer();
-        EntityEnchantments.get(event.getOriginal()).getAllEnchantments().forEach((enchantment, level) -> {
-            EntityEnchantments.setEnchantment(clone, enchantment, level);
-        });
-    }
 }

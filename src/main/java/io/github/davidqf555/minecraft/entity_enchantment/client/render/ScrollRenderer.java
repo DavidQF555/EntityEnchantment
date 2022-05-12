@@ -1,29 +1,28 @@
 package io.github.davidqf555.minecraft.entity_enchantment.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.EnchantmentTransfuserBlock;
 import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.ScrollTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class ScrollRenderer extends TileEntityRenderer<ScrollTileEntity> {
+public class ScrollRenderer implements BlockEntityRenderer<ScrollTileEntity> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Main.MOD_ID, "textures/entity/scroll.png");
     private final ScrollModel model;
 
-    public ScrollRenderer(TileEntityRendererDispatcher p_i226006_1_) {
-        super(p_i226006_1_);
-        model = new ScrollModel();
+    public ScrollRenderer(BlockEntityRendererProvider.Context context) {
+        model = new ScrollModel(context.bakeLayer(ScrollModel.LOCATION));
     }
 
     @Override
-    public void render(ScrollTileEntity p_225616_1_, float p_225616_2_, MatrixStack p_225616_3_, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
+    public void render(ScrollTileEntity p_225616_1_, float p_225616_2_, PoseStack p_225616_3_, MultiBufferSource p_225616_4_, int p_225616_5_, int p_225616_6_) {
         BlockState state = p_225616_1_.getBlockState();
         p_225616_3_.pushPose();
         p_225616_3_.translate(0.5D, 1.0625D, 0.5D);

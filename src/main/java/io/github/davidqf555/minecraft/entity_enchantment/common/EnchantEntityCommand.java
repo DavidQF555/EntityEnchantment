@@ -8,14 +8,14 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.command.arguments.ResourceLocationArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,7 +31,7 @@ public final class EnchantEntityCommand {
     private EnchantEntityCommand() {
     }
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("enchantentity")
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("add")
@@ -57,43 +57,43 @@ public final class EnchantEntityCommand {
         );
     }
 
-    private static int add(CommandSource source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
+    private static int add(CommandSourceStack source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
         EntityEnchantment val = EntityEnchantmentRegistry.getRegistry().getValue(enchantment);
         if (val == null) {
-            source.sendFailure(new TranslationTextComponent(COULD_NOT_FIND, enchantment));
+            source.sendFailure(new TranslatableComponent(COULD_NOT_FIND, enchantment));
             return 0;
         }
         return add(source, targets, val, level);
     }
 
-    private static int set(CommandSource source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
+    private static int set(CommandSourceStack source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
         EntityEnchantment val = EntityEnchantmentRegistry.getRegistry().getValue(enchantment);
         if (val == null) {
-            source.sendFailure(new TranslationTextComponent(COULD_NOT_FIND, enchantment));
+            source.sendFailure(new TranslatableComponent(COULD_NOT_FIND, enchantment));
             return 0;
         }
         return set(source, targets, val, level);
     }
 
-    private static int add(CommandSource source, Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
+    private static int add(CommandSourceStack source, Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
         int success = 0;
         for (Entity target : targets) {
             if (target instanceof LivingEntity && EntityEnchantments.addEnchantment((LivingEntity) target, enchantment, level)) {
                 success++;
             }
         }
-        source.sendSuccess(new TranslationTextComponent(APPLY, enchantment.getDisplayName(level), success), true);
+        source.sendSuccess(new TranslatableComponent(APPLY, enchantment.getDisplayName(level), success), true);
         return success;
     }
 
-    private static int set(CommandSource source, Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
+    private static int set(CommandSourceStack source, Collection<? extends Entity> targets, EntityEnchantment enchantment, int level) {
         int success = 0;
         for (Entity target : targets) {
             if (target instanceof LivingEntity && EntityEnchantments.setEnchantment((LivingEntity) target, enchantment, level)) {
                 success++;
             }
         }
-        source.sendSuccess(new TranslationTextComponent(APPLY, enchantment.getDisplayName(level), success), true);
+        source.sendSuccess(new TranslatableComponent(APPLY, enchantment.getDisplayName(level), success), true);
         return success;
     }
 
@@ -102,10 +102,10 @@ public final class EnchantEntityCommand {
         register(event.getDispatcher());
     }
 
-    private static class EntityEnchantmentProvider implements SuggestionProvider<CommandSource> {
+    private static class EntityEnchantmentProvider implements SuggestionProvider<CommandSourceStack> {
 
         @Override
-        public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSource> context, SuggestionsBuilder builder) {
+        public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
             for (EntityEnchantment enchantment : EntityEnchantmentRegistry.getRegistry()) {
                 builder.suggest(enchantment.getRegistryName().toString());
             }

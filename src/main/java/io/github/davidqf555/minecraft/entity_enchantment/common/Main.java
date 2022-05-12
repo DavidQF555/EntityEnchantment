@@ -4,15 +4,15 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.registration.Blo
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod("entity_enchantment")
 public class Main {

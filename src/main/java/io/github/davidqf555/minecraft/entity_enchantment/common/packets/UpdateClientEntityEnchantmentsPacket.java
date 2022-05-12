@@ -4,9 +4,9 @@ import io.github.davidqf555.minecraft.entity_enchantment.client.ClientReference;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public class UpdateClientEntityEnchantmentsPacket {
 
-    private static final BiConsumer<UpdateClientEntityEnchantmentsPacket, PacketBuffer> ENCODER = (message, buffer) -> {
+    private static final BiConsumer<UpdateClientEntityEnchantmentsPacket, FriendlyByteBuf> ENCODER = (message, buffer) -> {
         buffer.writeInt(message.id);
         buffer.writeInt(message.enchantments.size());
         message.enchantments.forEach((enchantment, level) -> {
@@ -25,7 +25,7 @@ public class UpdateClientEntityEnchantmentsPacket {
             buffer.writeInt(level);
         });
     };
-    private static final Function<PacketBuffer, UpdateClientEntityEnchantmentsPacket> DECODER = buffer -> {
+    private static final Function<FriendlyByteBuf, UpdateClientEntityEnchantmentsPacket> DECODER = buffer -> {
         int id = buffer.readInt();
         Map<EntityEnchantment, Integer> enchantments = new HashMap<>();
         int size = buffer.readInt();

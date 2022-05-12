@@ -3,28 +3,27 @@ package io.github.davidqf555.minecraft.entity_enchantment.common;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
+public class EntityEnchantments implements INBTSerializable<CompoundTag> {
 
     private final Map<EntityEnchantment, Integer> enchantments;
 
@@ -56,11 +55,11 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
     }
 
     public static boolean isDataEnchanted(LivingEntity entity) {
-        CompoundNBT data = entity.getPersistentData();
-        if (data.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
-            CompoundNBT tag = data.getCompound(Main.MOD_ID);
+        CompoundTag data = entity.getPersistentData();
+        if (data.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
+            CompoundTag tag = data.getCompound(Main.MOD_ID);
             for (String key : tag.getAllKeys()) {
-                if (tag.contains(key, Constants.NBT.TAG_INT) && tag.getInt(key) > 0) {
+                if (tag.contains(key, Tag.TAG_INT) && tag.getInt(key) > 0) {
                     return true;
                 }
             }
@@ -69,14 +68,14 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
     }
 
     public static void setEnchantmentsData(Entity entity, Map<EntityEnchantment, Integer> enchantments) {
-        CompoundNBT data = entity.getPersistentData();
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag data = entity.getPersistentData();
+        CompoundTag tag = new CompoundTag();
         enchantments.forEach((enchantment, level) -> tag.putInt(enchantment.toString(), level));
         data.put(Main.MOD_ID, tag);
     }
 
     public static EntityEnchantments get(LivingEntity entity) {
-        return entity.getCapability(Provider.capability).orElseGet(EntityEnchantments::new);
+        return entity.getCapability(Provider.CAPABILITY).orElseGet(EntityEnchantments::new);
     }
 
     public void onTick(LivingEntity entity) {
@@ -112,8 +111,8 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
         for (EntityEnchantment enchantment : EntityEnchantmentRegistry.getRegistry()) {
             tag.putInt(enchantment.getRegistryName().toString(), getLevel(enchantment));
         }
@@ -121,48 +120,36 @@ public class EntityEnchantments implements INBTSerializable<CompoundNBT> {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         IForgeRegistry<EntityEnchantment> registry = EntityEnchantmentRegistry.getRegistry();
         for (String key : nbt.getAllKeys()) {
-            if (nbt.contains(key, Constants.NBT.TAG_INT)) {
+            if (nbt.contains(key, Tag.TAG_INT)) {
                 setLevel(registry.getValue(new ResourceLocation(key)), nbt.getInt(key));
             }
         }
     }
 
-    public static class Provider implements ICapabilitySerializable<INBT> {
+    public static class Provider implements ICapabilitySerializable<CompoundTag> {
 
-        @CapabilityInject(EntityEnchantments.class)
-        public static Capability<EntityEnchantments> capability = null;
-        private final LazyOptional<EntityEnchantments> instance = LazyOptional.of(() -> Objects.requireNonNull(capability.getDefaultInstance()));
+        public static final ResourceLocation ID = new ResourceLocation(Main.MOD_ID, "entity_enchantments");
+        public static final Capability<EntityEnchantments> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+        });
+        private final LazyOptional<EntityEnchantments> instance = LazyOptional.of(EntityEnchantments::new);
 
         @Nonnull
         @Override
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-            return cap == capability ? instance.cast() : LazyOptional.empty();
+            return cap == CAPABILITY ? instance.cast() : LazyOptional.empty();
         }
 
         @Override
-        public INBT serializeNBT() {
-            return capability.getStorage().writeNBT(capability, instance.orElseThrow(NullPointerException::new), null);
+        public CompoundTag serializeNBT() {
+            return instance.orElseThrow(NullPointerException::new).serializeNBT();
         }
 
         @Override
-        public void deserializeNBT(INBT nbt) {
-            capability.getStorage().readNBT(capability, instance.orElseThrow(NullPointerException::new), null, nbt);
-        }
-    }
-
-    public static class Storage implements Capability.IStorage<EntityEnchantments> {
-
-        @Override
-        public INBT writeNBT(Capability<EntityEnchantments> capability, EntityEnchantments instance, Direction side) {
-            return instance.serializeNBT();
-        }
-
-        @Override
-        public void readNBT(Capability<EntityEnchantments> capability, EntityEnchantments instance, Direction side, INBT nbt) {
-            instance.deserializeNBT((CompoundNBT) nbt);
+        public void deserializeNBT(CompoundTag nbt) {
+            instance.orElseThrow(NullPointerException::new).deserializeNBT(nbt);
         }
     }
 }

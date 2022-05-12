@@ -1,8 +1,8 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Map;
 
@@ -15,21 +15,21 @@ public abstract class PotionEffectEnchantment extends EntityEnchantment {
     @Override
     public void onTick(LivingEntity entity, int level) {
         super.onTick(entity, level);
-        for (EffectInstance effect : createEffects(entity, level)) {
+        for (MobEffectInstance effect : createEffects(entity, level)) {
             entity.addEffect(effect);
         }
     }
 
-    protected EffectInstance[] createEffects(LivingEntity entity, int level) {
-        Map<Effect, Integer> map = getEffectsMap(entity, level);
-        EffectInstance[] effects = new EffectInstance[map.size()];
+    protected MobEffectInstance[] createEffects(LivingEntity entity, int level) {
+        Map<MobEffect, Integer> map = getEffectsMap(entity, level);
+        MobEffectInstance[] effects = new MobEffectInstance[map.size()];
         int index = 0;
-        for (Map.Entry<Effect, Integer> entry : map.entrySet()) {
-            effects[index] = new EffectInstance(entry.getKey(), 2, entry.getValue(), true, false, false);
+        for (Map.Entry<MobEffect, Integer> entry : map.entrySet()) {
+            effects[index] = new MobEffectInstance(entry.getKey(), 2, entry.getValue(), true, false, false);
             index++;
         }
         return effects;
     }
 
-    protected abstract Map<Effect, Integer> getEffectsMap(LivingEntity entity, int level);
+    protected abstract Map<MobEffect, Integer> getEffectsMap(LivingEntity entity, int level);
 }

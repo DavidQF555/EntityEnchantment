@@ -2,14 +2,14 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientIllusionTicksPacket;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -25,78 +25,78 @@ public class IllusionEnchantment extends EntityEnchantment {
     }
 
     public static void setIllusionDuration(Entity entity, int ticks) {
-        CompoundNBT tag = entity.getPersistentData();
-        CompoundNBT data;
-        if (tag.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
+        CompoundTag tag = entity.getPersistentData();
+        CompoundTag data;
+        if (tag.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
             data = tag.getCompound(Main.MOD_ID);
         } else {
-            data = new CompoundNBT();
+            data = new CompoundTag();
             tag.put(Main.MOD_ID, data);
         }
         data.putInt("Illusion Duration", ticks);
     }
 
     public static int getIllusionDuration(Entity entity) {
-        CompoundNBT tag = entity.getPersistentData();
-        if (tag.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
-            CompoundNBT data = tag.getCompound(Main.MOD_ID);
-            return data.contains("Illusion Duration", Constants.NBT.TAG_INT) ? data.getInt("Illusion Duration") : 0;
+        CompoundTag tag = entity.getPersistentData();
+        if (tag.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
+            CompoundTag data = tag.getCompound(Main.MOD_ID);
+            return data.contains("Illusion Duration", Tag.TAG_INT) ? data.getInt("Illusion Duration") : 0;
         } else {
             return 0;
         }
     }
 
     public static void setTotalIllusionDuration(Entity entity, int ticks) {
-        CompoundNBT tag = entity.getPersistentData();
-        CompoundNBT data;
-        if (tag.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
+        CompoundTag tag = entity.getPersistentData();
+        CompoundTag data;
+        if (tag.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
             data = tag.getCompound(Main.MOD_ID);
         } else {
-            data = new CompoundNBT();
+            data = new CompoundTag();
             tag.put(Main.MOD_ID, data);
         }
         data.putInt("Illusion Total Duration", ticks);
     }
 
     public static int getTotalIllusionDuration(Entity entity) {
-        CompoundNBT tag = entity.getPersistentData();
-        if (tag.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
-            CompoundNBT data = tag.getCompound(Main.MOD_ID);
-            return data.contains("Illusion Total Duration", Constants.NBT.TAG_INT) ? data.getInt("Illusion Total Duration") : 0;
+        CompoundTag tag = entity.getPersistentData();
+        if (tag.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
+            CompoundTag data = tag.getCompound(Main.MOD_ID);
+            return data.contains("Illusion Total Duration", Tag.TAG_INT) ? data.getInt("Illusion Total Duration") : 0;
         } else {
             return 0;
         }
     }
 
-    public static Vector3d[] getIllusionOffsets(Entity entity) {
-        CompoundNBT tag = entity.getPersistentData();
-        if (tag.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
-            CompoundNBT data = tag.getCompound(Main.MOD_ID);
-            if (data.contains("Illusion Offsets", Constants.NBT.TAG_LIST)) {
-                ListNBT list = data.getList("Illusion Offsets", Constants.NBT.TAG_COMPOUND);
-                Vector3d[] offsets = new Vector3d[list.size()];
+    public static Vec3[] getIllusionOffsets(Entity entity) {
+        CompoundTag tag = entity.getPersistentData();
+        if (tag.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
+            CompoundTag data = tag.getCompound(Main.MOD_ID);
+            if (data.contains("Illusion Offsets", Tag.TAG_LIST)) {
+                ListTag list = data.getList("Illusion Offsets", Tag.TAG_COMPOUND);
+                Vec3[] offsets = new Vec3[list.size()];
                 for (int i = 0; i < list.size(); i++) {
-                    CompoundNBT nbt = list.getCompound(i);
-                    offsets[i] = new Vector3d(nbt.getDouble("X"), nbt.getDouble("Y"), nbt.getDouble("Z"));
+                    CompoundTag nbt = list.getCompound(i);
+                    offsets[i] = new Vec3(nbt.getDouble("X"), nbt.getDouble("Y"), nbt.getDouble("Z"));
                 }
                 return offsets;
             }
         }
-        return new Vector3d[0];
+        return new Vec3[0];
     }
 
-    public static void setIllusionOffsets(Entity entity, Vector3d[] offsets) {
-        CompoundNBT tag = entity.getPersistentData();
-        CompoundNBT data;
-        if (tag.contains(Main.MOD_ID, Constants.NBT.TAG_COMPOUND)) {
+    public static void setIllusionOffsets(Entity entity, Vec3[] offsets) {
+        CompoundTag tag = entity.getPersistentData();
+        CompoundTag data;
+        if (tag.contains(Main.MOD_ID, Tag.TAG_COMPOUND)) {
             data = tag.getCompound(Main.MOD_ID);
         } else {
-            data = new CompoundNBT();
+            data = new CompoundTag();
             tag.put(Main.MOD_ID, data);
         }
-        ListNBT list = new ListNBT();
-        for (Vector3d offset : offsets) {
-            CompoundNBT nbt = new CompoundNBT();
+        ListTag list = new ListTag();
+        for (Vec3 offset : offsets) {
+            CompoundTag nbt = new CompoundTag();
             nbt.putDouble("X", offset.x());
             nbt.putDouble("Y", offset.y());
             nbt.putDouble("Z", offset.z());
@@ -120,9 +120,9 @@ public class IllusionEnchantment extends EntityEnchantment {
         if (current <= 0) {
             int count = this.count.apply(level);
             Random rand = entity.getRandom();
-            Vector3d[] offsets = new Vector3d[count];
+            Vec3[] offsets = new Vec3[count];
             for (int i = 0; i < count; i++) {
-                offsets[i] = new Vector3d(rand.nextDouble() * 7 - 3, rand.nextDouble() * 3 - 1, rand.nextDouble() * 7 - 3);
+                offsets[i] = new Vec3(rand.nextDouble() * 7 - 3, rand.nextDouble() * 3 - 1, rand.nextDouble() * 7 - 3);
             }
             setIllusionOffsets(entity, offsets);
             int duration = this.duration.apply(level);

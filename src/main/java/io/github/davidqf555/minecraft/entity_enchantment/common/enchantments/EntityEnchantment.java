@@ -1,10 +1,10 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
@@ -58,10 +58,10 @@ public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
         return id;
     }
 
-    public TranslationTextComponent getDisplayName(int level) {
-        TranslationTextComponent text = new TranslationTextComponent(getID());
+    public TranslatableComponent getDisplayName(int level) {
+        TranslatableComponent text = new TranslatableComponent(getID());
         if (level != 1 || getNaturalMax() != 1) {
-            text.append(" ").append(new TranslationTextComponent("enchantment.level." + level));
+            text.append(" ").append(new TranslatableComponent("enchantment.level." + level));
         }
         return text;
     }

@@ -4,9 +4,9 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantmen
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.IllusionEnchantment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public final class ClientReference {
     }
 
     public static void updateEnchantments(int id, Map<EntityEnchantment, Integer> enchantments) {
-        ClientWorld world = Minecraft.getInstance().level;
+        ClientLevel world = Minecraft.getInstance().level;
         if (world != null) {
             Entity entity = world.getEntity(id);
             if (entity != null) {
@@ -25,8 +25,8 @@ public final class ClientReference {
         }
     }
 
-    public static void updateIllusion(int id, int ticks, int total, Vector3d[] offsets) {
-        ClientWorld world = Minecraft.getInstance().level;
+    public static void updateIllusion(int id, int ticks, int total, Vec3[] offsets) {
+        ClientLevel world = Minecraft.getInstance().level;
         if (world != null) {
             Entity entity = world.getEntity(id);
             if (entity != null) {
