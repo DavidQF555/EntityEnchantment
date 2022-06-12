@@ -1,13 +1,14 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
+public class EntityEnchantment {
 
     private static int totalWeight = 0;
     private final int max, weight;
@@ -58,10 +59,10 @@ public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
         return id;
     }
 
-    public TranslatableComponent getDisplayName(int level) {
-        TranslatableComponent text = new TranslatableComponent(getID());
+    public Component getDisplayName(int level) {
+        MutableComponent text = Component.translatable(getID()).withStyle(ChatFormatting.GRAY);
         if (level != 1 || getNaturalMax() != 1) {
-            text.append(" ").append(new TranslatableComponent("enchantment.level." + level));
+            text.append(" ").append(Component.translatable("enchantment.level." + level));
         }
         return text;
     }

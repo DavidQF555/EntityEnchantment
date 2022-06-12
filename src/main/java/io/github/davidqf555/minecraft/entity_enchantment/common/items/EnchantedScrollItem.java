@@ -4,7 +4,6 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantmen
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SimpleFoiledItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -37,12 +37,12 @@ public class EnchantedScrollItem extends SimpleFoiledItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag tooltip) {
         super.appendHoverText(stack, world, text, tooltip);
-        getEnchantments(stack).forEach((enchantment, level) -> text.add(enchantment.getDisplayName(level).withStyle(ChatFormatting.GRAY)));
+        getEnchantments(stack).forEach((enchantment, level) -> text.add(enchantment.getDisplayName(level)));
     }
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (group.equals(category)) {
             items.addAll(getAll());
         }
     }
@@ -78,8 +78,9 @@ public class EnchantedScrollItem extends SimpleFoiledItem {
 
     public void setEnchantments(ItemStack stack, Map<EntityEnchantment, Integer> enchantments) {
         CompoundTag tag = new CompoundTag();
+        IForgeRegistry<EntityEnchantment> registry = EntityEnchantmentRegistry.getRegistry();
         enchantments.forEach((enchantment, level) -> {
-            tag.putInt(enchantment.getRegistryName().toString(), level);
+            tag.putInt(registry.getKey(enchantment).toString(), level);
         });
         stack.getOrCreateTagElement(Main.MOD_ID).put("Enchantments", tag);
     }

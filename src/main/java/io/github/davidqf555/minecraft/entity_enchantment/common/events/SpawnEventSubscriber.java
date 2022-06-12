@@ -5,12 +5,11 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.ServerConfigs;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class SpawnEventSubscriber {
@@ -21,7 +20,7 @@ public final class SpawnEventSubscriber {
     @SubscribeEvent
     public static void onLivingSpecialSpawn(LivingSpawnEvent.SpecialSpawn event) {
         LivingEntity entity = event.getEntityLiving();
-        Random rand = entity.getRandom();
+        RandomSource rand = entity.getRandom();
         if (!entity.level.isClientSide() && rand.nextDouble() < ServerConfigs.INSTANCE.naturalRate.get()) {
             int selected = rand.nextInt(EntityEnchantment.getTotalWeight());
             int current = 0;
@@ -36,7 +35,7 @@ public final class SpawnEventSubscriber {
         }
     }
 
-    private static int getLevel(Random random, int max) {
+    private static int getLevel(RandomSource random, int max) {
         double selected = random.nextDouble();
         double current = 0;
         double rate = ServerConfigs.INSTANCE.naturalLevelRate.get();

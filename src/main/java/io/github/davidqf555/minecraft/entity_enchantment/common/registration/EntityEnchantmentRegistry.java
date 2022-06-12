@@ -40,6 +40,6 @@ public final class EntityEnchantmentRegistry {
 
     @SubscribeEvent
     public static void onNewRegistry(NewRegistryEvent event) {
-        REGISTRY = event.create(new RegistryBuilder<EntityEnchantment>().setType(EntityEnchantment.class).setName(new ResourceLocation(Main.MOD_ID, "entity_enchantments")));
+        REGISTRY = event.create(new RegistryBuilder<EntityEnchantment>().setName(new ResourceLocation(Main.MOD_ID, "entity_enchantments")));
     }
 }

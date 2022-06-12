@@ -5,13 +5,13 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateCl
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 
-import java.util.Random;
 import java.util.function.Function;
 
 public class IllusionEnchantment extends EntityEnchantment {
@@ -119,7 +119,7 @@ public class IllusionEnchantment extends EntityEnchantment {
         int current = getIllusionDuration(entity);
         if (current <= 0) {
             int count = this.count.apply(level);
-            Random rand = entity.getRandom();
+            RandomSource rand = entity.getRandom();
             Vec3[] offsets = new Vec3[count];
             for (int i = 0; i < count; i++) {
                 offsets[i] = new Vec3(rand.nextDouble() * 7 - 3, rand.nextDouble() * 3 - 1, rand.nextDouble() * 7 - 3);

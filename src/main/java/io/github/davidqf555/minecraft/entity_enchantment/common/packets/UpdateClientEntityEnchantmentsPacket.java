@@ -7,6 +7,7 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.registration.Ent
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +21,9 @@ public class UpdateClientEntityEnchantmentsPacket {
     private static final BiConsumer<UpdateClientEntityEnchantmentsPacket, FriendlyByteBuf> ENCODER = (message, buffer) -> {
         buffer.writeInt(message.id);
         buffer.writeInt(message.enchantments.size());
+        IForgeRegistry<EntityEnchantment> registry = EntityEnchantmentRegistry.getRegistry();
         message.enchantments.forEach((enchantment, level) -> {
-            buffer.writeResourceLocation(enchantment.getRegistryName());
+            buffer.writeResourceLocation(registry.getKey(enchantment));
             buffer.writeInt(level);
         });
     };

@@ -12,13 +12,14 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
@@ -60,7 +61,7 @@ public final class EnchantEntityCommand {
     private static int add(CommandSourceStack source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
         EntityEnchantment val = EntityEnchantmentRegistry.getRegistry().getValue(enchantment);
         if (val == null) {
-            source.sendFailure(new TranslatableComponent(COULD_NOT_FIND, enchantment));
+            source.sendFailure(Component.translatable(COULD_NOT_FIND, enchantment));
             return 0;
         }
         return add(source, targets, val, level);
@@ -69,7 +70,7 @@ public final class EnchantEntityCommand {
     private static int set(CommandSourceStack source, Collection<? extends Entity> targets, ResourceLocation enchantment, int level) {
         EntityEnchantment val = EntityEnchantmentRegistry.getRegistry().getValue(enchantment);
         if (val == null) {
-            source.sendFailure(new TranslatableComponent(COULD_NOT_FIND, enchantment));
+            source.sendFailure(Component.translatable(COULD_NOT_FIND, enchantment));
             return 0;
         }
         return set(source, targets, val, level);
@@ -82,7 +83,7 @@ public final class EnchantEntityCommand {
                 success++;
             }
         }
-        source.sendSuccess(new TranslatableComponent(APPLY, enchantment.getDisplayName(level), success), true);
+        source.sendSuccess(Component.translatable(APPLY, enchantment.getDisplayName(level), success), true);
         return success;
     }
 
@@ -93,7 +94,7 @@ public final class EnchantEntityCommand {
                 success++;
             }
         }
-        source.sendSuccess(new TranslatableComponent(APPLY, enchantment.getDisplayName(level), success), true);
+        source.sendSuccess(Component.translatable(APPLY, enchantment.getDisplayName(level), success), true);
         return success;
     }
 
@@ -106,8 +107,9 @@ public final class EnchantEntityCommand {
 
         @Override
         public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
+            IForgeRegistry<EntityEnchantment> registry = EntityEnchantmentRegistry.getRegistry();
             for (EntityEnchantment enchantment : EntityEnchantmentRegistry.getRegistry()) {
-                builder.suggest(enchantment.getRegistryName().toString());
+                builder.suggest(registry.getKey(enchantment).toString());
             }
             return builder.buildFuture();
         }

@@ -113,8 +113,9 @@ public class EntityEnchantments implements INBTSerializable<CompoundTag> {
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
+        IForgeRegistry<EntityEnchantment> registry = EntityEnchantmentRegistry.getRegistry();
         for (EntityEnchantment enchantment : EntityEnchantmentRegistry.getRegistry()) {
-            tag.putInt(enchantment.getRegistryName().toString(), getLevel(enchantment));
+            tag.putInt(registry.getKey(enchantment).toString(), getLevel(enchantment));
         }
         return tag;
     }
