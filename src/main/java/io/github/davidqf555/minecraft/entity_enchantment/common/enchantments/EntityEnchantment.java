@@ -39,6 +39,10 @@ public class EntityEnchantment extends ForgeRegistryEntry<EntityEnchantment> {
 
     }
 
+    public void onAttack(LivingEntity entity, int level, LivingEntity target, float damage) {
+
+    }
+
     public int getNaturalMax() {
         return max;
     }
