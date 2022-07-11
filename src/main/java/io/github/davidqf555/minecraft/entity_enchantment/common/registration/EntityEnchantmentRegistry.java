@@ -27,6 +27,7 @@ public final class EntityEnchantmentRegistry {
     public static final RegistryObject<IllusionEnchantment> ILLUSION = register("illusion", () -> new IllusionEnchantment(3, 4, level -> level * 30, level -> level * 2));
     public static final RegistryObject<FireEnchantment> INFERNAL = register("infernal", () -> new FireEnchantment(5, 2, level -> level * 2));
     public static final RegistryObject<IceEnchantment> FROSTBORN = register("frostborn", () -> new IceEnchantment(5, 3, level -> level * 40, level -> level - 1));
+    public static final RegistryObject<ReflectEnchantment> REFLECT = register("reflect", () -> new ReflectEnchantment(3, 5, level -> level * 0.2f));
 
     private static IForgeRegistry<EntityEnchantment> REGISTRY = null;
 
