@@ -94,6 +94,14 @@ public class EntityEnchantments implements INBTSerializable<CompoundTag> {
         }));
     }
 
+    public void onAttack(LivingEntity entity, LivingEntity target, float damage) {
+        getAllEnchantments().forEach((enchantment, level) -> {
+            if (level > 0) {
+                enchantment.onAttack(entity, level, target, damage);
+            }
+        });
+    }
+
     public void setLevel(EntityEnchantment enchantment, int level) {
         enchantments.put(enchantment, level);
     }

@@ -4,7 +4,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.+'
 }
 
-version = '1.19-1.0.0'
+version = '1.19-1.1.0'
 group = 'io.github.davidqf555.minecraft.entity_enchantment'
 archivesBaseName = 'entity_enchantment'
 

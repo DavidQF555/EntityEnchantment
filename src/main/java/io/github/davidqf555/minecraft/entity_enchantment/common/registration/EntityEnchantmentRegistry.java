@@ -1,10 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.registration;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.AttributeModificationEnchantment;
-import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
-import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.ExplosionEnchantment;
-import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.IllusionEnchantment;
+import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -25,6 +22,9 @@ public final class EntityEnchantmentRegistry {
     public static final RegistryObject<AttributeModificationEnchantment> ARMOR = register("armor", () -> new AttributeModificationEnchantment(5, 5, UUID.fromString("acf22782-cec7-11ec-9d64-0242ac120002"), new AttributeModificationEnchantment.Modifier(Attributes.ARMOR, level -> level * 1.0, AttributeModifier.Operation.ADDITION)));
     public static final RegistryObject<EntityEnchantment> UNSTABLE = register("unstable", () -> new ExplosionEnchantment(2, 2, 5, level -> level * 2f, level -> level >= 2));
     public static final RegistryObject<IllusionEnchantment> ILLUSION = register("illusion", () -> new IllusionEnchantment(3, 4, level -> level * 30, level -> level * 2));
+    public static final RegistryObject<FireEnchantment> INFERNAL = register("infernal", () -> new FireEnchantment(5, 2, level -> level * 2));
+    public static final RegistryObject<IceEnchantment> FROSTBORN = register("frostborn", () -> new IceEnchantment(5, 3, level -> level * 40, level -> level - 1));
+
     private static Supplier<IForgeRegistry<EntityEnchantment>> REGISTRY = null;
 
     private EntityEnchantmentRegistry() {

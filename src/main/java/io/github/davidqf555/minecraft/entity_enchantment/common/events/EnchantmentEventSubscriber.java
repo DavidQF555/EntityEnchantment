@@ -3,6 +3,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.events;
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TickEvent;
@@ -20,7 +21,13 @@ public final class EnchantmentEventSubscriber {
     public static void onLivingDamage(LivingDamageEvent event) {
         LivingEntity entity = event.getEntityLiving();
         if (!entity.level.isClientSide()) {
-            EntityEnchantments.get(entity).onDamaged(entity, event.getSource(), event.getAmount());
+            DamageSource source = event.getSource();
+            Entity damage = source.getEntity();
+            float amount = event.getAmount();
+            if (damage instanceof LivingEntity) {
+                EntityEnchantments.get((LivingEntity) damage).onAttack((LivingEntity) damage, entity, amount);
+            }
+            EntityEnchantments.get(entity).onDamaged(entity, source, amount);
         }
     }
 
