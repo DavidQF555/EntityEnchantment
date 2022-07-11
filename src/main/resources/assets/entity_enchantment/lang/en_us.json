@@ -8,5 +8,7 @@
   "entity_enchantment.entity_enchantment.speed": "Speed",
   "entity_enchantment.entity_enchantment.armor": "Armor",
   "entity_enchantment.entity_enchantment.unstable": "Unstable",
-  "entity_enchantment.entity_enchantment.illusion": "Illusion"
+  "entity_enchantment.entity_enchantment.illusion": "Illusion",
+  "entity_enchantment.entity_enchantment.infernal": "Infernal",
+  "entity_enchantment.entity_enchantment.frostborn": "Frostborn"
 }
