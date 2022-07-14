@@ -1,7 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.blocks;
 
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.ItemRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.TileEntityRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;

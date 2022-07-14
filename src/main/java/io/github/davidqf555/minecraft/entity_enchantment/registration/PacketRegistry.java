@@ -1,4 +1,4 @@
-package io.github.davidqf555.minecraft.entity_enchantment.common.registration;
+package io.github.davidqf555.minecraft.entity_enchantment.registration;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;

@@ -5,8 +5,8 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantmen
 import io.github.davidqf555.minecraft.entity_enchantment.common.ServerConfigs;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.items.EnchantedScrollItem;
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
