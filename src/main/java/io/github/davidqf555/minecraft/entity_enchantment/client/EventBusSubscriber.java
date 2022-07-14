@@ -6,7 +6,7 @@ import io.github.davidqf555.minecraft.entity_enchantment.client.render.IllusionR
 import io.github.davidqf555.minecraft.entity_enchantment.client.render.ScrollModel;
 import io.github.davidqf555.minecraft.entity_enchantment.client.render.ScrollRenderer;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.TileEntityRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;

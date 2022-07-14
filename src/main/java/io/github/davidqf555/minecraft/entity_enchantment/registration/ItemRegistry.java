@@ -1,4 +1,4 @@
-package io.github.davidqf555.minecraft.entity_enchantment.common.registration;
+package io.github.davidqf555.minecraft.entity_enchantment.registration;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.items.EnchantedScrollItem;
@@ -16,8 +16,8 @@ public final class ItemRegistry {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
 
-    public static final RegistryObject<EnchantedScrollItem> ENCHANTED_SCROLL = register("enchanted_scroll", () -> new EnchantedScrollItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> SCROLL = register("scroll", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<EnchantedScrollItem> ENCHANTED_SCROLL = register("enchanted_scroll", () -> new EnchantedScrollItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).rarity(Rarity.EPIC).stacksTo(1)));
+    public static final RegistryObject<Item> SCROLL = register("scroll", () -> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<BlockItem> ENCHANTMENT_TRANSFUSER = register("enchantment_transfuser", () -> new BlockItem(BlockRegistry.ENCHANTMENT_TRANSFUSER.get(), new Item.Properties().tab(CreativeModeTab.TAB_MISC).rarity(Rarity.EPIC)));
 
     private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {

@@ -2,12 +2,17 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.events;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
+import io.github.davidqf555.minecraft.entity_enchantment.common.items.EnchantedScrollItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -38,6 +43,28 @@ public final class EnchantmentEventSubscriber {
                 if (entity instanceof LivingEntity) {
                     EntityEnchantments.get((LivingEntity) entity).onTick((LivingEntity) entity);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        Player clone = event.getPlayer();
+        EntityEnchantments.get(event.getOriginal()).getAllEnchantments().forEach((enchantment, level) -> {
+            EntityEnchantments.setEnchantment(clone, enchantment, level);
+        });
+    }
+
+    @SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        ItemStack left = event.getLeft();
+        ItemStack right = event.getRight();
+        if (left.getItem() instanceof EnchantedScrollItem && right.getItem() instanceof EnchantedScrollItem) {
+            ItemStack out = EnchantedScrollItem.getMergeResult(left, right);
+            if (!out.isEmpty()) {
+                event.setOutput(out);
+                event.setCost(EnchantedScrollItem.getMergeCost(left, right));
+                event.setMaterialCost(1);
             }
         }
     }
