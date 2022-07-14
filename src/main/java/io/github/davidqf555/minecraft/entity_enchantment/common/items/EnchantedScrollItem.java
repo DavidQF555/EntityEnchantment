@@ -29,6 +29,50 @@ public class EnchantedScrollItem extends SimpleFoiledItem {
         super(properties);
     }
 
+    public static ItemStack getMergeResult(ItemStack original, ItemStack addition) {
+        ItemStack out = original.getItem().getDefaultInstance();
+        Map<EntityEnchantment, Integer> oLevels = ((EnchantedScrollItem) original.getItem()).getEnchantments(original);
+        Map<EntityEnchantment, Integer> aLevels = ((EnchantedScrollItem) addition.getItem()).getEnchantments(addition);
+        for (EntityEnchantment enchantment : aLevels.keySet()) {
+            int a = aLevels.get(enchantment);
+            if (oLevels.containsKey(enchantment)) {
+                int o = oLevels.get(enchantment);
+                oLevels.put(enchantment, a == o && a < enchantment.getNaturalMax() ? o + 1 : Math.max(a, o));
+            } else {
+                oLevels.put(enchantment, a);
+            }
+        }
+        ((EnchantedScrollItem) out.getItem()).setEnchantments(out, oLevels);
+        return out;
+    }
+
+    public static int getMergeCost(ItemStack original, ItemStack addition) {
+        int cost = 0;
+        Map<EntityEnchantment, Integer> oLevels = ((EnchantedScrollItem) original.getItem()).getEnchantments(original);
+        Map<EntityEnchantment, Integer> aLevels = ((EnchantedScrollItem) addition.getItem()).getEnchantments(addition);
+        for (EntityEnchantment enchantment : aLevels.keySet()) {
+            int a = aLevels.get(enchantment);
+            int costLevel = 0;
+            if (oLevels.containsKey(enchantment)) {
+                int o = oLevels.get(enchantment);
+                if (a == o && a < enchantment.getNaturalMax()) {
+                    oLevels.put(enchantment, o + 1);
+                    costLevel = o + 1;
+                } else if (o < a) {
+                    oLevels.put(enchantment, a);
+                    costLevel = a;
+                }
+            } else {
+                oLevels.put(enchantment, a);
+                costLevel = a;
+            }
+            if (costLevel > 0) {
+                cost += 2 * costLevel * (1 - enchantment.getWeight() / EntityEnchantment.getTotalWeight());
+            }
+        }
+        return Math.min(40, cost);
+    }
+
     @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;

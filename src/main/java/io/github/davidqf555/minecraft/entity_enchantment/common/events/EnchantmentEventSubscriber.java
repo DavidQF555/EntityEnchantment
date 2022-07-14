@@ -2,11 +2,14 @@ package io.github.davidqf555.minecraft.entity_enchantment.common.events;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
+import io.github.davidqf555.minecraft.entity_enchantment.common.items.EnchantedScrollItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -49,4 +52,19 @@ public final class EnchantmentEventSubscriber {
             EntityEnchantments.setEnchantment(clone, enchantment, level);
         });
     }
+
+    @SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        ItemStack left = event.getLeft();
+        ItemStack right = event.getRight();
+        if (left.getItem() instanceof EnchantedScrollItem && right.getItem() instanceof EnchantedScrollItem) {
+            ItemStack out = EnchantedScrollItem.getMergeResult(left, right);
+            if (!out.isEmpty()) {
+                event.setOutput(out);
+                event.setCost(EnchantedScrollItem.getMergeCost(left, right));
+                event.setMaterialCost(1);
+            }
+        }
+    }
+
 }
