@@ -1,9 +1,11 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.blocks;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.ServerConfigs;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.items.EnchantedScrollItem;
+import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -104,17 +106,22 @@ public class EnchantmentTransfuserBlock extends ContainerBlock {
                             for (LivingEntity entity : entities) {
                                 EntityEnchantments data = EntityEnchantments.get(entity);
                                 if (!data.isEmpty()) {
-                                    addTrail((ServerWorld) world, start, entity.getEyePosition(1));
+                                    Map<EntityEnchantment, Integer> original = new HashMap<>(data.getAllEnchantments());
                                     Map<EntityEnchantment, Integer> enchantments = new HashMap<>();
-                                    EntityEnchantment selected = Util.getRandom(data.getAllEnchantments().entrySet().stream().filter(entry -> entry.getValue() > 0).map(Map.Entry::getKey).toArray(EntityEnchantment[]::new), player.getRandom());
-                                    enchantments.put(selected, data.getLevel(selected));
-                                    EntityEnchantments.setEnchantment(entity, selected, 0);
-                                    ItemStack enchanted = ItemRegistry.ENCHANTED_SCROLL.get().getDefaultInstance();
-                                    ((EnchantedScrollItem) enchanted.getItem()).setEnchantments(enchanted, enchantments);
-                                    scroll.setItem(enchanted);
-                                    world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.ENCHANTED));
-                                    player.giveExperienceLevels(-cost);
-                                    return ActionResultType.CONSUME;
+                                    Pair<EntityEnchantment, Integer> siphon = EnchantedScrollItem.siphonRandom(original, player.getRandom());
+                                    if (siphon != null) {
+                                        enchantments.put(siphon.getFirst(), siphon.getSecond());
+                                        for (EntityEnchantment enchantment : EntityEnchantmentRegistry.getRegistry()) {
+                                            EntityEnchantments.setEnchantment(entity, enchantment, original.getOrDefault(enchantment, 0));
+                                        }
+                                        ItemStack enchanted = ItemRegistry.ENCHANTED_SCROLL.get().getDefaultInstance();
+                                        ((EnchantedScrollItem) enchanted.getItem()).setEnchantments(enchanted, enchantments);
+                                        scroll.setItem(enchanted);
+                                        addTrail((ServerWorld) world, start, entity.getEyePosition(1));
+                                        world.setBlockAndUpdate(pos, state.setValue(SCROLL, ScrollState.ENCHANTED));
+                                        player.giveExperienceLevels(-cost);
+                                        return ActionResultType.CONSUME;
+                                    }
                                 }
                             }
                         }
