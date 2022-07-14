@@ -5,7 +5,6 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.registration.Ent
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.ItemRegistry;
 import io.github.davidqf555.minecraft.entity_enchantment.common.registration.TileEntityRegistry;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -29,7 +28,6 @@ public class Main {
     public Main() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC);
         addRegistries(FMLJavaModLoadingContext.get().getModEventBus());
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     private static void addRegistries(IEventBus bus) {
