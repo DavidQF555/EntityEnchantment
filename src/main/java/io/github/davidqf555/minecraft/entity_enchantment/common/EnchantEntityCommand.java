@@ -7,7 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;

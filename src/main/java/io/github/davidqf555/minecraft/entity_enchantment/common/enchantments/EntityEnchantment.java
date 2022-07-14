@@ -1,6 +1,6 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;

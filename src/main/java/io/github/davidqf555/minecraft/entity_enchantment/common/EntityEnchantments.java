@@ -2,7 +2,7 @@ package io.github.davidqf555.minecraft.entity_enchantment.common;
 
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.common.packets.UpdateClientEntityEnchantmentsPacket;
-import io.github.davidqf555.minecraft.entity_enchantment.common.registration.EntityEnchantmentRegistry;
+import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

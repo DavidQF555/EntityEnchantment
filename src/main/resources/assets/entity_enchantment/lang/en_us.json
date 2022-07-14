@@ -10,5 +10,6 @@
   "entity_enchantment.entity_enchantment.unstable": "Unstable",
   "entity_enchantment.entity_enchantment.illusion": "Illusion",
   "entity_enchantment.entity_enchantment.infernal": "Infernal",
-  "entity_enchantment.entity_enchantment.frostborn": "Frostborn"
+  "entity_enchantment.entity_enchantment.frostborn": "Frostborn",
+  "entity_enchantment.entity_enchantment.reflect": "Reflect"
 }
