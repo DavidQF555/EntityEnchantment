@@ -24,7 +24,7 @@ public final class EnchantmentEventSubscriber {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        LivingEntity entity = event.getEntityLiving();
+        LivingEntity entity = event.getEntity();
         if (!entity.level.isClientSide()) {
             DamageSource source = event.getSource();
             Entity damage = source.getEntity();
@@ -37,9 +37,9 @@ public final class EnchantmentEventSubscriber {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.WorldTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && event.world instanceof ServerLevel) {
-            for (Entity entity : ((ServerLevel) event.world).getEntities().getAll()) {
+    public static void onWorldTick(TickEvent.LevelTickEvent event) {
+        if (event.phase == TickEvent.Phase.START && event.level instanceof ServerLevel) {
+            for (Entity entity : ((ServerLevel) event.level).getEntities().getAll()) {
                 if (entity instanceof LivingEntity) {
                     EntityEnchantments.get((LivingEntity) entity).onTick((LivingEntity) entity);
                 }
@@ -49,7 +49,7 @@ public final class EnchantmentEventSubscriber {
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        Player clone = event.getPlayer();
+        Player clone = event.getEntity();
         EntityEnchantments.get(event.getOriginal()).getAllEnchantments().forEach((enchantment, level) -> {
             EntityEnchantments.setEnchantment(clone, enchantment, level);
         });

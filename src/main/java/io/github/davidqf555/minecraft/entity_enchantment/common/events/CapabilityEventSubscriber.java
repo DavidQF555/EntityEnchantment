@@ -32,7 +32,7 @@ public final class CapabilityEventSubscriber {
         public static void onPlayerClone(PlayerEvent.Clone event) {
             Player original = event.getOriginal();
             original.reviveCaps();
-            EntityEnchantments.get(event.getPlayer()).deserializeNBT(EntityEnchantments.get(original).serializeNBT());
+            EntityEnchantments.get(event.getEntity()).deserializeNBT(EntityEnchantments.get(original).serializeNBT());
             original.invalidateCaps();
         }
     }

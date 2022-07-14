@@ -20,7 +20,7 @@ public final class DataEventSubscriber {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayer && target instanceof LivingEntity) {
             Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new UpdateClientEntityEnchantmentsPacket(target.getId(), EntityEnchantments.get((LivingEntity) target).getAllEnchantments()));
@@ -29,12 +29,12 @@ public final class DataEventSubscriber {
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        updateSelfData(event.getPlayer());
+        updateSelfData(event.getEntity());
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        updateSelfData(event.getPlayer());
+        updateSelfData(event.getEntity());
     }
 
     private static void updateSelfData(Player player) {
