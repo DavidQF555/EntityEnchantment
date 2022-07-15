@@ -30,11 +30,15 @@ public final class CapabilityEventSubscriber {
 
         @SubscribeEvent
         public static void onPlayerClone(PlayerEvent.Clone event) {
+            Player clone = event.getPlayer();
             Player original = event.getOriginal();
             original.reviveCaps();
-            EntityEnchantments.get(event.getPlayer()).deserializeNBT(EntityEnchantments.get(original).serializeNBT());
+            EntityEnchantments.get(event.getOriginal()).getAllEnchantments().forEach((enchantment, level) -> {
+                EntityEnchantments.setEnchantment(clone, enchantment, level);
+            });
             original.invalidateCaps();
         }
+
     }
 
     @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
