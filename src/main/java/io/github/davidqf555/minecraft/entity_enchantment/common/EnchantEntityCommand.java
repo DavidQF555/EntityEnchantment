@@ -83,7 +83,8 @@ public final class EnchantEntityCommand {
                 success++;
             }
         }
-        source.sendSuccess(Component.translatable(APPLY, enchantment.getDisplayName(level), success), true);
+        int count = success;
+        source.sendSuccess(() -> Component.translatable(APPLY, enchantment.getDisplayName(level), count), true);
         return success;
     }
 
@@ -94,7 +95,8 @@ public final class EnchantEntityCommand {
                 success++;
             }
         }
-        source.sendSuccess(Component.translatable(APPLY, enchantment.getDisplayName(level), success), true);
+        int count = success;
+        source.sendSuccess(() -> Component.translatable(APPLY, enchantment.getDisplayName(level), count), true);
         return success;
     }
 

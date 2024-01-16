@@ -25,7 +25,7 @@ public final class EnchantmentEventSubscriber {
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
         LivingEntity entity = event.getEntity();
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             DamageSource source = event.getSource();
             Entity damage = source.getEntity();
             float amount = event.getAmount();

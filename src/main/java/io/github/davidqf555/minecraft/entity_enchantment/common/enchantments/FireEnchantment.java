@@ -26,10 +26,10 @@ public class FireEnchantment extends EntityEnchantment {
     public void onTick(LivingEntity entity, int level) {
         entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 2, 0, true, false, true));
         BlockPos pos = entity.blockPosition();
-        if ((!(entity instanceof Player) || entity.isCrouching()) && entity.level.isEmptyBlock(pos)) {
+        if ((!(entity instanceof Player) || entity.isCrouching()) && entity.level().isEmptyBlock(pos)) {
             BlockState fire = Blocks.FIRE.defaultBlockState();
-            if (((FireBlock) Blocks.FIRE).canSurvive(fire, entity.level, pos)) {
-                entity.level.setBlockAndUpdate(pos, fire);
+            if (((FireBlock) Blocks.FIRE).canSurvive(fire, entity.level(), pos)) {
+                entity.level().setBlockAndUpdate(pos, fire);
             }
         }
     }

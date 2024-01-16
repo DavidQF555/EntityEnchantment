@@ -21,7 +21,7 @@ public final class SpawnEventSubscriber {
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
         Mob entity = event.getEntity();
         RandomSource rand = entity.getRandom();
-        if (!entity.level.isClientSide() && rand.nextDouble() < ServerConfigs.INSTANCE.naturalRate.get()) {
+        if (!entity.level().isClientSide() && rand.nextDouble() < ServerConfigs.INSTANCE.naturalRate.get()) {
             int selected = rand.nextInt(EntityEnchantment.getTotalWeight());
             int current = 0;
             for (EntityEnchantment enchantment : EntityEnchantmentRegistry.getRegistry()) {

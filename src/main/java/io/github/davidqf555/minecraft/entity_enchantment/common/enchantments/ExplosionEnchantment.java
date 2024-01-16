@@ -26,7 +26,7 @@ public class ExplosionEnchantment extends EntityEnchantment {
         if (damage >= minDamage && !source.is(DamageTypes.EXPLOSION)) {
             boolean fire = this.fire.test(level);
             float radius = this.radius.apply(level);
-            entity.level.explode(entity, null, null, entity.getX(), entity.getEyeY(), entity.getZ(), radius, fire, Level.ExplosionInteraction.MOB);
+            entity.level().explode(entity, null, null, entity.getX(), entity.getEyeY(), entity.getZ(), radius, fire, Level.ExplosionInteraction.MOB);
         }
     }
 }
