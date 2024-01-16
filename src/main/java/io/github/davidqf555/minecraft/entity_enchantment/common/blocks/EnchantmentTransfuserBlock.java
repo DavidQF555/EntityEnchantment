@@ -1,6 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.blocks;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.MapCodec;
 import io.github.davidqf555.minecraft.entity_enchantment.common.EntityEnchantments;
 import io.github.davidqf555.minecraft.entity_enchantment.common.ServerConfigs;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
@@ -46,6 +47,7 @@ import java.util.Map;
 
 public class EnchantmentTransfuserBlock extends BaseEntityBlock {
 
+    public static final MapCodec<EnchantmentTransfuserBlock> CODEC = simpleCodec(EnchantmentTransfuserBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<ScrollState> SCROLL = EnumProperty.create("scroll", ScrollState.class);
     public static final VoxelShape SHAPE_COMMON = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
@@ -56,6 +58,11 @@ public class EnchantmentTransfuserBlock extends BaseEntityBlock {
 
     public EnchantmentTransfuserBlock(BlockBehaviour.Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected MapCodec<? extends EnchantmentTransfuserBlock> codec() {
+        return CODEC;
     }
 
     @SuppressWarnings("deprecation")
