@@ -7,6 +7,7 @@ modId = "entity_enchantment"
 version = "${file.jarVersion}"
 displayName = "Entity Enchantment"
 displayURL = "https://github.com/DavidQF555/EntityEnchantment"
+updateJSONURL = "https://raw.githubusercontent.com/DavidQF555/EntityEnchantment/update/update.json"
 logoFile = "logo.png"
 authors = "DavidQF555"
 description = 'This mod adds enchantments to entities.'
