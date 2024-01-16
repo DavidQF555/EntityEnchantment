@@ -29,9 +29,9 @@ public class IceEnchantment extends EntityEnchantment {
     public void onTick(LivingEntity entity, int level) {
         if (entity.isOnGround()) {
             BlockState ice = Blocks.FROSTED_ICE.defaultBlockState();
-            float range = level + 3;
+            int range = level + 3;
             BlockPos center = entity.blockPosition();
-            for (BlockPos pos : BlockPos.betweenClosed(center.offset(-range, -1, -range), center.offset(range, -1.0D, range))) {
+            for (BlockPos pos : BlockPos.betweenClosed(center.offset(-range, -1, -range), center.offset(range, -1, range))) {
                 if (pos.closerToCenterThan(entity.position(), range)) {
                     if (entity.level.isEmptyBlock(pos.above())) {
                         BlockState state = entity.level.getBlockState(pos);

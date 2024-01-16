@@ -7,7 +7,7 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.Ent
 import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -18,7 +18,7 @@ public final class SpawnEventSubscriber {
     }
 
     @SubscribeEvent
-    public static void onLivingSpecialSpawn(LivingSpawnEvent.SpecialSpawn event) {
+    public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
         Mob entity = event.getEntity();
         RandomSource rand = entity.getRandom();
         if (!entity.level.isClientSide() && rand.nextDouble() < ServerConfigs.INSTANCE.naturalRate.get()) {

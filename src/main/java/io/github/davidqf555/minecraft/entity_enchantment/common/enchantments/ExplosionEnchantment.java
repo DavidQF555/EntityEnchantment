@@ -1,10 +1,9 @@
 package io.github.davidqf555.minecraft.entity_enchantment.common.enchantments;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
-import net.minecraft.world.level.Explosion;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -24,11 +23,10 @@ public class ExplosionEnchantment extends EntityEnchantment {
 
     @Override
     public void onDamaged(LivingEntity entity, int level, DamageSource source, float damage) {
-        if (damage >= minDamage && !source.isExplosion()) {
-            Explosion.BlockInteraction mode = ForgeEventFactory.getMobGriefingEvent(entity.level, entity) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
+        if (damage >= minDamage && !source.is(DamageTypes.EXPLOSION)) {
             boolean fire = this.fire.test(level);
             float radius = this.radius.apply(level);
-            entity.level.explode(entity, DamageSource.explosion(entity), new EntityBasedExplosionDamageCalculator(entity), entity.getX(), entity.getEyeY(), entity.getZ(), radius, fire, mode);
+            entity.level.explode(entity, null, null, entity.getX(), entity.getEyeY(), entity.getZ(), radius, fire, Level.ExplosionInteraction.MOB);
         }
     }
 }

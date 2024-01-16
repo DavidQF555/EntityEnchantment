@@ -1,7 +1,7 @@
 package io.github.davidqf555.minecraft.entity_enchantment.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.EnchantmentTransfuserBlock;
 import io.github.davidqf555.minecraft.entity_enchantment.common.blocks.ScrollTileEntity;
@@ -26,10 +26,10 @@ public class ScrollRenderer implements BlockEntityRenderer<ScrollTileEntity> {
         BlockState state = p_225616_1_.getBlockState();
         p_225616_3_.pushPose();
         p_225616_3_.translate(0.5D, 1.0625D, 0.5D);
-        p_225616_3_.mulPose(Vector3f.YP.rotationDegrees(-state.getValue(EnchantmentTransfuserBlock.FACING).getClockWise().toYRot()));
-        p_225616_3_.mulPose(Vector3f.ZN.rotationDegrees(22.5F));
+        p_225616_3_.mulPose(Axis.YP.rotationDegrees(-state.getValue(EnchantmentTransfuserBlock.FACING).getClockWise().toYRot()));
+        p_225616_3_.mulPose(Axis.ZN.rotationDegrees(22.5F));
         p_225616_3_.translate(0.125, -0.125D, 0.0D);
-        p_225616_3_.mulPose(Vector3f.XP.rotationDegrees(90));
+        p_225616_3_.mulPose(Axis.XP.rotationDegrees(90));
         p_225616_3_.translate(0, 0, -0.125);
         switch (state.getValue(EnchantmentTransfuserBlock.SCROLL)) {
             case ENCHANTED:

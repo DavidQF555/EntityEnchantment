@@ -6,14 +6,12 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
 import net.minecraft.Util;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SimpleFoiledItem;
 import net.minecraft.world.item.TooltipFlag;
@@ -103,13 +101,6 @@ public class EnchantedScrollItem extends SimpleFoiledItem {
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> text, TooltipFlag tooltip) {
         super.appendHoverText(stack, world, text, tooltip);
         getEnchantments(stack).forEach((enchantment, level) -> text.add(enchantment.getDisplayName(level)));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (group.equals(category)) {
-            items.addAll(getAll());
-        }
     }
 
     public List<ItemStack> getAll() {
