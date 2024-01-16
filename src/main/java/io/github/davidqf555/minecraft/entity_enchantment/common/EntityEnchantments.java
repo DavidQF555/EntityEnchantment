@@ -48,7 +48,7 @@ public class EntityEnchantments implements INBTSerializable<CompoundTag> {
             }
             Map<EntityEnchantment, Integer> levels = enchantments.getAllEnchantments();
             setEnchantmentsData(entity, levels);
-            Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new UpdateClientEntityEnchantmentsPacket(entity.getId(), levels));
+            Main.CHANNEL.send(new UpdateClientEntityEnchantmentsPacket(entity.getId(), levels), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
             return true;
         }
         return false;

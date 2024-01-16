@@ -4,10 +4,9 @@ import io.github.davidqf555.minecraft.entity_enchantment.client.ClientReference;
 import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -36,8 +35,8 @@ public class UpdateClientIllusionTicksPacket {
         }
         return new UpdateClientIllusionTicksPacket(id, ticks, total, offsets);
     };
-    private static final BiConsumer<UpdateClientIllusionTicksPacket, Supplier<NetworkEvent.Context>> CONSUMER = (message, context) -> {
-        NetworkEvent.Context cont = context.get();
+    private static final BiConsumer<UpdateClientIllusionTicksPacket, Supplier<CustomPayloadEvent.Context>> CONSUMER = (message, context) -> {
+        CustomPayloadEvent.Context cont = context.get();
         message.handle(cont);
     };
 
@@ -52,12 +51,15 @@ public class UpdateClientIllusionTicksPacket {
     }
 
     public static void register(int index) {
-        Main.CHANNEL.registerMessage(index, UpdateClientIllusionTicksPacket.class, ENCODER, DECODER, CONSUMER, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        Main.CHANNEL.messageBuilder(UpdateClientIllusionTicksPacket.class, index, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ENCODER)
+                .decoder(DECODER)
+                .consumerMainThread(UpdateClientIllusionTicksPacket::handle)
+                .add();
     }
 
 
-    private void handle(NetworkEvent.Context context) {
-        context.enqueueWork(() -> ClientReference.updateIllusion(id, ticks, total, offsets));
-        context.setPacketHandled(true);
+    private void handle(CustomPayloadEvent.Context context) {
+        ClientReference.updateIllusion(id, ticks, total, offsets);
     }
 }

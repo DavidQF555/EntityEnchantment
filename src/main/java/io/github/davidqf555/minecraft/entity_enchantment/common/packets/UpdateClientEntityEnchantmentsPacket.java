@@ -5,13 +5,12 @@ import io.github.davidqf555.minecraft.entity_enchantment.common.Main;
 import io.github.davidqf555.minecraft.entity_enchantment.common.enchantments.EntityEnchantment;
 import io.github.davidqf555.minecraft.entity_enchantment.registration.EntityEnchantmentRegistry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -36,8 +35,8 @@ public class UpdateClientEntityEnchantmentsPacket {
         }
         return new UpdateClientEntityEnchantmentsPacket(id, enchantments);
     };
-    private static final BiConsumer<UpdateClientEntityEnchantmentsPacket, Supplier<NetworkEvent.Context>> CONSUMER = (message, context) -> {
-        NetworkEvent.Context cont = context.get();
+    private static final BiConsumer<UpdateClientEntityEnchantmentsPacket, Supplier<CustomPayloadEvent.Context>> CONSUMER = (message, context) -> {
+        CustomPayloadEvent.Context cont = context.get();
         message.handle(cont);
     };
 
@@ -50,12 +49,15 @@ public class UpdateClientEntityEnchantmentsPacket {
     }
 
     public static void register(int index) {
-        Main.CHANNEL.registerMessage(index, UpdateClientEntityEnchantmentsPacket.class, ENCODER, DECODER, CONSUMER, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        Main.CHANNEL.messageBuilder(UpdateClientEntityEnchantmentsPacket.class, index, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ENCODER)
+                .decoder(DECODER)
+                .consumerMainThread(UpdateClientEntityEnchantmentsPacket::handle)
+                .add();
     }
 
-
-    private void handle(NetworkEvent.Context context) {
-        context.enqueueWork(() -> ClientReference.updateEnchantments(id, enchantments));
-        context.setPacketHandled(true);
+    private void handle(CustomPayloadEvent.Context context) {
+        ClientReference.updateEnchantments(id, enchantments);
     }
+
 }

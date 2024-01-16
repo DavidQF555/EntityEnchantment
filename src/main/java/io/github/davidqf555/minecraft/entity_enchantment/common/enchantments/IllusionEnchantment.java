@@ -110,7 +110,7 @@ public class IllusionEnchantment extends EntityEnchantment {
         int ticks = getIllusionDuration(entity);
         if (ticks > 0) {
             setIllusionDuration(entity, ticks - 1);
-            Main.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new UpdateClientIllusionTicksPacket(entity.getId(), ticks - 1, getTotalIllusionDuration(entity), getIllusionOffsets(entity)));
+            Main.CHANNEL.send(new UpdateClientIllusionTicksPacket(entity.getId(), ticks - 1, getTotalIllusionDuration(entity), getIllusionOffsets(entity)), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
         }
     }
 

@@ -23,7 +23,7 @@ public final class DataEventSubscriber {
         Player player = event.getEntity();
         Entity target = event.getTarget();
         if (player instanceof ServerPlayer && target instanceof LivingEntity) {
-            Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new UpdateClientEntityEnchantmentsPacket(target.getId(), EntityEnchantments.get((LivingEntity) target).getAllEnchantments()));
+            Main.CHANNEL.send(new UpdateClientEntityEnchantmentsPacket(target.getId(), EntityEnchantments.get((LivingEntity) target).getAllEnchantments()), PacketDistributor.PLAYER.with((ServerPlayer) player));
         }
     }
 
@@ -39,7 +39,7 @@ public final class DataEventSubscriber {
 
     private static void updateSelfData(Player player) {
         if (player instanceof ServerPlayer) {
-            Main.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new UpdateClientEntityEnchantmentsPacket(player.getId(), EntityEnchantments.get(player).getAllEnchantments()));
+            Main.CHANNEL.send(new UpdateClientEntityEnchantmentsPacket(player.getId(), EntityEnchantments.get(player).getAllEnchantments()), PacketDistributor.PLAYER.with((ServerPlayer) player));
         }
     }
 }

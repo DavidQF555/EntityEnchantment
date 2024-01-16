@@ -10,6 +10,7 @@ import io.github.davidqf555.minecraft.entity_enchantment.registration.TileEntity
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,8 +36,8 @@ public final class EventBusSubscriber {
 
     @SubscribeEvent
     public static void onAddLayers(EntityRenderersEvent.AddLayers event) {
-        for (String skin : event.getSkins()) {
-            LivingEntityRenderer<Player, EntityModel<Player>> renderer = event.getSkin(skin);
+        for (PlayerSkin.Model skin : event.getSkins()) {
+            LivingEntityRenderer<Player, EntityModel<Player>> renderer = event.getPlayerSkin(skin);
             if (renderer != null) {
                 addLayers(renderer);
             }
